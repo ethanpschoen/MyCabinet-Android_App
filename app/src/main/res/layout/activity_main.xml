@@ -5,28 +5,97 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    tools:context=".MainActivity">
 
-
-    <ImageView
-        android:id="@+id/settings_button"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_gravity="end"
-        android:scaleType="fitCenter"
+    <EditText
+        android:id="@+id/food_item"
+        android:layout_width="295dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="96dp"
+        android:autofillHints=""
+        android:hint="@string/enter_food_item_name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settings_icon" />
+        app:layout_constraintVertical_bias="0.103" />
+
+    <!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Add your items to the Kitchen!"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/section_list"
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <EditText
+        android:id="@+id/food_notes"
+        android:layout_width="295dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="324dp"
+        android:autofillHints=""
+        android:hint="@string/enter_food_notes"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/food_name_item"
+        android:layout_width="295dp"
+        android:layout_height="56dp"
+
+        android:layout_marginTop="164dp"
+        android:autofillHints=""
+        android:hint="@string/enter_food_item_expiration_date"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.138" />
+
+    <Button
+        android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="308dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/add"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_button">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.217" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:id="@+id/clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="276dp"
+        android:text="@string/clear"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
