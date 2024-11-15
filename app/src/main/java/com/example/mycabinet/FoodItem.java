@@ -1,7 +1,5 @@
 package com.example.mycabinet;
 import android.content.Context;
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class FoodItem {
@@ -22,8 +19,9 @@ public class FoodItem {
     private List<String> mFoodItemNotesList;
 
     String foodItemCount;
-    String fdate;
-
+    String date;
+    String time;
+    String type;
     String description;
 
 
@@ -34,8 +32,9 @@ public class FoodItem {
         mFoodItemNotesList = new ArrayList<>();
 
         this.foodItemCount = foodItemCount;
-        this.fdate = fdate;
-
+        this.date = date;
+        this.time = time;
+        this.type = type;
         this.description = description;
     }
 
