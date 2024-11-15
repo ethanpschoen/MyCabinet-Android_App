@@ -38,6 +38,17 @@
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="76dp"
+        android:text="ADD YOUR FOOD ITEM"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/food_notes"
         android:layout_width="295dp"
