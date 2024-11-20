@@ -1,68 +1,47 @@
 package com.example.mycabinet;
-import android.content.Context;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.time.LocalDate;
+
+import java.time.format.DateTimeFormatter;
 
 public class FoodItem {
-    public static final String FOODNAME = "fooditem.txt";
 
-    private Context mContext;
-    private List<String> mFoodItemList;
+    private String itemName;
+    private LocalDate expirationDate;
+    private String itemNotes;
 
-    public FoodItem(Context context) {
-        mContext = context;
-        mFoodItemList = new ArrayList<>();
+    public FoodItem(String itemName, LocalDate expirationDate) {
+        this.itemName = itemName;
+        this.expirationDate = expirationDate;
     }
 
-    public void addItem(String item) throws IllegalArgumentException {
-        mFoodItemList.add(item);
+    public FoodItem(String itemName, LocalDate expirationDate, String itemNotes) {
+        this.itemName = itemName;
+        this.expirationDate = expirationDate;
+        this.itemNotes = itemNotes;
     }
 
-    public String[] getItems() {
-        String[] items = new String[mFoodItemList.size()];
-        return mFoodItemList.toArray(items);
+    public String getItemName() {
+        return itemName;
     }
 
-    public void clear() {
-        mFoodItemList.clear();
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public void saveToFile() throws IOException {
-
-        // Write list to file in internal storage
-        FileOutputStream outputStream = mContext.openFileOutput(FOODNAME, Context.MODE_PRIVATE);
-        writeListToStream(outputStream);
+    public LocalDate getExpirationDate() {
+        return expirationDate;
     }
 
-    public void readFromFile() throws IOException {
-
-        // Read in list from file in internal storage
-        FileInputStream inputStream = mContext.openFileInput(FOODNAME);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            mFoodItemList.clear();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                mFoodItemList.add(line);
-            }
-        }
-        catch (FileNotFoundException ex) {
-            // Ignore
-        }
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    private void writeListToStream(FileOutputStream outputStream) {
-        PrintWriter writer = new PrintWriter(outputStream);
-        for (String item : mFoodItemList) {
-            writer.println(item);
-        }
-        writer.close();
+    public String getItemNotes() {
+        return itemNotes;
+    }
+
+    public void setItemNotes(String itemNotes) {
+        this.itemNotes = itemNotes;
     }
 }
