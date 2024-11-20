@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Notifications">
+
+        <SwitchPreferenceCompat
+            android:key="notification_type_1"
+            android:title="Notification Type 1"
+            android:defaultValue="true" />
+
+        <SwitchPreferenceCompat
+            android:key="notification_type_2"
+            android:title="Notification Type 2"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <SwitchPreferenceComat
+        android:key="light_theme"
+        android:title="Light Theme"
+        android:defaultValue="true" />
+
+    <EditTextPreference
+        android:key="reminder_days"
+        android:title="Days Before Reminder"
+        android:defaultValue="3"
+        android:inputType="number" />
+
+</PreferenceScreen>
