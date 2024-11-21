@@ -130,7 +130,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/white"
         android:textColorHighlight="#8BC34A"
-        android:textColorHint="#8BC34A"
+        android:textColorHint="#AAE7AC"
         android:textColorLink="#8BC34A"
         app:iconTint="#AAE7AC"
         app:layout_constraintBottom_toTopOf="@+id/clear_button"
