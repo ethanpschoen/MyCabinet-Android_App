@@ -1,7 +1,14 @@
 package com.example.mycabinet;
 import android.content.Context;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -63,6 +70,32 @@ public class FoodItem {
         String[] items = new String[mFoodItemNotesList.size()];
         return mFoodItemNotesList.toArray(items);
     }
+
+    public class FoodItemButton extends Fragment {
+
+        @Override
+        public View onCreateView(
+                LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState
+        ) {
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.food_item, container, false);
+        }
+
+        public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            view.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NavHostFragment.findNavController(FoodItemButton.this)
+                            .navigate(R.id.action_food_item_to_sectionlistitem);
+                }
+            });
+        }
+    }
+
 }
+
 
 
