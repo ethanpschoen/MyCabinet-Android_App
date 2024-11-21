@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightgreen">#8BC34A</color>
+    <color name="platinum">#E6E8E6</color>
+    <color name="timberwolf">#CED0CE</color>
+    <color name="ashgray">#9FB8AD</color>
+    <color name="feldgrau">#475841</color>
+    <color name="onyx">#3F403F</color>
 </resources>
