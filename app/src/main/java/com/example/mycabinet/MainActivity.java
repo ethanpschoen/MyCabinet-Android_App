@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
         kitchen.addSection(new FoodSection("Pantry"));
         kitchen.addSection(new FoodSection("Freezer"));
         kitchen.addSection(new FoodSection("Refrigerator"));
-        kitchen.addSection(new FoodSection("Filler1"));
-        kitchen.addSection(new FoodSection("Filler2"));
-        kitchen.addSection(new FoodSection("Filler3"));
-        kitchen.addSection(new FoodSection("Filler4"));
-        kitchen.addSection(new FoodSection("Filler5"));
-        kitchen.addSection(new FoodSection("Filler6"));
-        kitchen.addSection(new FoodSection("Other"));
+//        kitchen.addSection(new FoodSection("Filler1"));
+//        kitchen.addSection(new FoodSection("Filler2"));
+//        kitchen.addSection(new FoodSection("Filler3"));
+//        kitchen.addSection(new FoodSection("Filler4"));
+//        kitchen.addSection(new FoodSection("Filler5"));
+//        kitchen.addSection(new FoodSection("Filler6"));
+//        kitchen.addSection(new FoodSection("Other"));
 
         recyclerView = findViewById(R.id.section_list);
         adapter = new ListSectionAdapter(this, kitchen.getSections());
