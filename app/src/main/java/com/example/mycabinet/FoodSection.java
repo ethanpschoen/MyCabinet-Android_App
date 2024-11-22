@@ -12,6 +12,10 @@ public class FoodSection {
     private ImageView sectionIcon;
     private int sectionSize;
 
+    // Required empty public constructor
+    public FoodSection() {
+    }
+
     public FoodSection(String sectionName) {
         this.sectionName = sectionName;
         this.sectionItems = new ArrayList<FoodItem>();
@@ -29,6 +33,8 @@ public class FoodSection {
     }
 
     public ArrayList<FoodItem> getSectionItems() {
+        System.out.println(sectionItems.get(0).getItemName());
+        System.out.println(sectionItems.toString());
         return sectionItems;
     }
 
@@ -63,6 +69,7 @@ public class FoodSection {
     public void addFoodItem(FoodItem item) {
         sectionItems.add(item);
         sectionSize++;
+        System.out.println(sectionItems.get(0).getItemName());
     }
 
     public void removeFoodItem(FoodItem item) {

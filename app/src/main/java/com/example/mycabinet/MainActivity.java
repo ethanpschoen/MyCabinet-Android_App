@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,44 +28,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_container, new IconSectionView())
-//                    .commit();
-//        }
+        String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
+        for (String sectionName : sections){
+            FoodSection section = new FoodSection(sectionName);
+            for (int i = 0; i < 10; i++){
+                section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+            }
+            kitchen.addSection(section);
+        }
 
-        kitchen.addSection(new FoodSection("Fruits"));
-        kitchen.addSection(new FoodSection("Vegetables"));
-        kitchen.addSection(new FoodSection("Grains"));
-        kitchen.addSection(new FoodSection("Dairy"));
-        kitchen.addSection(new FoodSection("Meats"));
-        kitchen.addSection(new FoodSection("Pantry"));
-        kitchen.addSection(new FoodSection("Freezer"));
-        kitchen.addSection(new FoodSection("Refrigerator"));
-//        kitchen.addSection(new FoodSection("Filler1"));
-//        kitchen.addSection(new FoodSection("Filler2"));
-//        kitchen.addSection(new FoodSection("Filler3"));
-//        kitchen.addSection(new FoodSection("Filler4"));
-//        kitchen.addSection(new FoodSection("Filler5"));
-//        kitchen.addSection(new FoodSection("Filler6"));
-//        kitchen.addSection(new FoodSection("Other"));
-
-        recyclerView = findViewById(R.id.section_list);
-        adapter = new ListSectionAdapter(this, kitchen.getSections());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        if (savedInstanceState == null) {
+            loadFragment(new ListSectionView(kitchen));
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar_menu, menu);
-        Toast.makeText(this, "Menu created", Toast.LENGTH_SHORT).show();
-        Log.d("Menu", "Menu created");
-        System.out.println("menu inflated");
         return true;
     }
 
@@ -78,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
     }
 
     public void showSection(int position) {
