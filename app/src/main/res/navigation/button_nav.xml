@@ -2,17 +2,5 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/button_nav"
-    app:startDestination="@id/FoodItemButton">
-
-    <fragment
-        android:id="@+id/FoodItemButton"
-        android:label="@string/add"
-        tools:layout="@layout/food_item">
-
-        <action
-            android:id="@+id/action_food_item_to_sectionlistitem"
-            app:destination="@id/food_item" />
-    </fragment>
-
-</navigation>
+    android:id="@+id/button_nav">
+    </navigation>
