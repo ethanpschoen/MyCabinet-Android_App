@@ -1,6 +1,7 @@
 package com.example.mycabinet;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         for (String sectionName : sections){
             FoodSection section = new FoodSection(sectionName);
             for (int i = 0; i < 10; i++){
-                section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+                }
             }
             kitchen.addSection(section);
         }
