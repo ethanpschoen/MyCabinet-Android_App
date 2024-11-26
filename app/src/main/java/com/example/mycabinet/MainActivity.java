@@ -15,25 +15,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 public class MainActivity extends AppCompatActivity {
+
     private Kitchen kitchen = new Kitchen();
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
-        for (String sectionName : sections){
-            FoodSection section = new FoodSection(sectionName);
-            for (int i = 0; i < 10; i++){
-                section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
-            }
-            kitchen.addSection(section);
-        }
-
         if (savedInstanceState == null) {
             loadFragment(new ListSectionView(kitchen));
+            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
+            for (String sectionName : sections){
+                FoodSection section = new FoodSection(sectionName);
+                for (int i = 0; i < 10; i++){
+                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+                }
+                kitchen.addSection(section);
+            }
         }
     }
 
@@ -68,5 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void showSection(int position) {
         FoodSection section = kitchen.getSections().get(position);
+    }
+
+    public void addFoodItem(View view) {
+        Intent intent = new Intent(this, AddItemActivity.class);
+        startActivity(intent);
     }
 }

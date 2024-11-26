@@ -1,8 +1,8 @@
 package com.example.mycabinet;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,20 +12,33 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class AddItemActivity extends AppCompatActivity {
 
+    EditText foodName;
+    EditText foodNotes;
+    EditText foodMonth;
+    EditText foodDay;
+    EditText foodYear;
+    Button addButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_item);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
 
-    public void foodItem(View view) {
-        Intent i = new Intent(getApplicationContext(), FoodSection.class);
-        startActivity(i);
+        foodName = findViewById(R.id.food_name);
+        foodNotes = findViewById(R.id.food_notes);
+        foodMonth = findViewById(R.id.food_month);
+        foodDay = findViewById(R.id.food_day);
+        foodYear = findViewById(R.id.food_year);
+        addButton = findViewById(R.id.add_item_button);
+
+        addButton.setOnClickListener(view -> {
+            String name = foodName.getText().toString();
+            String notes = foodNotes.getText().toString();
+            String month = foodMonth.getText().toString();
+            String day = foodDay.getText().toString();
+            String year = foodYear.getText().toString();
+
+        });
     }
 }
