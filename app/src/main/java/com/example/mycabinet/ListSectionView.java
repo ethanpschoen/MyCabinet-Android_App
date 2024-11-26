@@ -1,5 +1,4 @@
 package com.example.mycabinet;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;

@@ -1,24 +1,11 @@
 package com.example.mycabinet;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class FoodSection extends AppCompatActivity {
+public class FoodSection{
 
 
     private String sectionName;
