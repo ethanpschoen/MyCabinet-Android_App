@@ -1,5 +1,4 @@
 package com.example.mycabinet;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
 
     private List<FoodSection> mSectionList;
     private MainActivity mActivity;
-
     public ListSectionAdapter(MainActivity activity, List<FoodSection> sectionList) {
         mSectionList = sectionList;
         mActivity = activity;
@@ -72,7 +70,6 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
             view.setClickable(true);
             view.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View v) {
             mActivity.showSection(getAdapterPosition());
