@@ -39,6 +39,12 @@ public class AddItemActivity extends AppCompatActivity {
             String day = foodDay.getText().toString();
             String year = foodYear.getText().toString();
 
+            if (name.isEmpty()) {
+                // dialog box, enter name
+            } else if (month.isEmpty() || day.isEmpty() || year.isEmpty()) {
+                // dialog box, enter date
+            } // check if date is valid, dialog box if not
+
         });
     }
 }
