@@ -135,13 +135,11 @@ public class AddItemActivity extends AppCompatActivity {
                 .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-
+                        // Automatically closes window
                     }
                 });
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
-
 }
