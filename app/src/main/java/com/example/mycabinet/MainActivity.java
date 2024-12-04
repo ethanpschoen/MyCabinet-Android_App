@@ -26,6 +26,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            String name = intent.getStringExtra("NAME");
+            String notes = intent.getStringExtra("NOTES");
+            int month = intent.getIntExtra("MONTH", LocalDate.now().getMonthValue());
+            int day = intent.getIntExtra("DAY", LocalDate.now().getDayOfMonth());
+            int year = intent.getIntExtra("YEAR", LocalDate.now().getYear());
+
+            FoodItem item = new FoodItem(name, LocalDate.of(year, month, day));
+            Toast.makeText(this, "Item received: " + item.getItemName(), Toast.LENGTH_SHORT).show();
+
+        }
+
         if (savedInstanceState == null) {
             loadFragment(new ListSectionView(kitchen));
             String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
@@ -38,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

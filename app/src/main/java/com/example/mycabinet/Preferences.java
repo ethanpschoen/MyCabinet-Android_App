@@ -2,6 +2,7 @@ package com.example.mycabinet;
 
 import java.util.HashMap;
 
+// Change this set-up to just use SharedPreferences?
 public class Preferences {
 
     HashMap<String, Boolean> notifications;
