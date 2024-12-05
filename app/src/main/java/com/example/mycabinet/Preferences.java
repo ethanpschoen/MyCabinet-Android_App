@@ -4,6 +4,7 @@ import android.widget.Button;
 
 import java.util.HashMap;
 
+// Change this set-up to just use SharedPreferences?
 public class Preferences {
     Button btn_setReminder, btn_setDay, btn_doneReminder;
     HashMap<String, Boolean> notifications;
