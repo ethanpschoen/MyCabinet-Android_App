@@ -8,4 +8,7 @@
     <color name="ashgray">#9FB8AD</color>
     <color name="feldgrau">#475841</color>
     <color name="onyx">#3F403F</color>
+
+    <color name="primary">#475841</color>
+    <color name="secondary">#8BC34A</color>
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Preferences">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_setReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightgreen"
+        android:text="Set your reminder time"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/btn_setDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightgreen"
+        android:text="Set your reminder day"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp"
+        android:textColor="@color/black"/>
+    <Button
+        android:id="@+id/btn_doneReminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:text="DONE"
+        android:background="@color/feldgrau"/>
+    <Button
+        android:id="@+id/settingsActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:text="Back to Settings"
+        android:background="@color/feldgrau"/>
+
+</LinearLayout>

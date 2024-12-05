@@ -1,9 +1,11 @@
 package com.example.mycabinet;
 
+import android.widget.Button;
+
 import java.util.HashMap;
 
 public class Preferences {
-
+    Button btn_setReminder, btn_setDay, btn_doneReminder;
     HashMap<String, Boolean> notifications;
     Boolean lightTheme;
     int daysBeforeReminder;
