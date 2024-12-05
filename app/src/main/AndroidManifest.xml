@@ -18,6 +18,10 @@
         <activity
             android:name=".AddItemActivity"
             android:exported="false" />
+        <activity
+            android:name=".SectionActivity" />
+        <activity
+            android:name=".SettingsActivity" />
         <activity android:name=".FoodItem" />
         <activity android:name=".FoodSection" />
         <activity

@@ -1,5 +1,5 @@
-
 package com.example.mycabinet;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         settingsActivity = findViewById(R.id.settingsActivity);
 
         settingsActivity.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         Intent intent = getIntent();
         if (intent != null) {
             String name = intent.getStringExtra("NAME");
@@ -56,11 +58,9 @@ public class MainActivity extends AppCompatActivity {
             int day = intent.getIntExtra("DAY", LocalDate.now().getDayOfMonth());
             int year = intent.getIntExtra("YEAR", LocalDate.now().getYear());
 
-            FoodItem item = new FoodItem(name, LocalDate.of(year, month, day));
+            FoodItem item = new FoodItem(name, LocalDate.of(year, month, day), notes);
             Toast.makeText(this, "Item received: " + item.getItemName(), Toast.LENGTH_SHORT).show();
-
         }
-
 
         if (savedInstanceState == null) {
             loadFragment(new ListSectionView(kitchen));
