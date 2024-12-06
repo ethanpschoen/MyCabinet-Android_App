@@ -59,7 +59,7 @@ public class SectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SectionActivity.this, SettingsActivity.class);
-                intent.putExtra("FROM_SECTION", section);
+                intent.putExtra("FROM_SECTION", section.getSectionName());
                 startActivity(intent);
             }
         });

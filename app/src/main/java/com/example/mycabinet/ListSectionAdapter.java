@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
 
     private List<FoodSection> mSectionList;
     private MainActivity mActivity;
+
     public ListSectionAdapter(MainActivity activity, List<FoodSection> sectionList) {
         mSectionList = sectionList;
         mActivity = activity;
@@ -35,22 +37,44 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ListSectionAdapter.ListSectionHolder holder, int position) {
-        FoodSection section = mSectionList.get(position);
+        FoodSection section = mSectionList.get(holder.getAdapterPosition());
+
         holder.mTitle.setText(section.getSectionName());
         holder.mSize.setText("Items: " + section.getSectionSize());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int clickedPosition = holder.getBindingAdapterPosition();
-                if (clickedPosition != RecyclerView.NO_POSITION) {
-                    FoodSection section = mSectionList.get(clickedPosition);
+                int currentPosition = holder.getAdapterPosition();
 
+                if (currentPosition != RecyclerView.NO_POSITION) {
                     Intent intent = new Intent(mActivity, SectionActivity.class);
 
-                    intent.putExtra("SECTION_TO_VIEW", section.getSectionName());
+                    FoodSection clickedSection = mSectionList.get(currentPosition);
+
+                    intent.putExtra("SECTION_TO_VIEW", clickedSection.getSectionName());
 
                     mActivity.startActivity(intent);
+                }
+            }
+        });
+
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentPosition = holder.getAdapterPosition();
+
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    FoodSection clickedSection = mSectionList.get(currentPosition);
+
+                    mSectionList.remove(section);
+                    notifyItemRemoved(currentPosition);
+                    notifyItemRangeChanged(currentPosition, mSectionList.size());
+
+
+                    Kitchen kitchen = Kitchen.getInstance();
+                    kitchen.removeSection(section);
                 }
             }
         });
@@ -61,22 +85,17 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
         return mSectionList.size();
     }
 
-    public class ListSectionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ListSectionHolder extends RecyclerView.ViewHolder {
 
         TextView mTitle;
         TextView mSize;
+        Button deleteButton;
 
         public ListSectionHolder(View view) {
             super(view);
             mTitle = view.findViewById(R.id.section_name);
             mSize = view.findViewById(R.id.item_date);
-            view.setClickable(true);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mActivity.showSection(getAdapterPosition());
+            deleteButton = view.findViewById(R.id.delete_section_button);
         }
     }
 }

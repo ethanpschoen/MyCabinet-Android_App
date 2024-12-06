@@ -35,7 +35,7 @@ public class ListItemView extends Fragment {
 
             recyclerView = view.findViewById(R.id.item_list);
             Log.d("ListItemView", "onCreateView: At recyclerView");
-            adapter = new ListItemAdapter(activity, section.getSectionItems());
+            adapter = new ListItemAdapter(activity, section);
             Log.d("ListItemView", "onCreateView: At adapter");
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
 

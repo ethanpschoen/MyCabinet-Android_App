@@ -49,10 +49,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             public void onClick(View view) {
                 Intent intent = getIntent();
 
-                if (intent.getParcelableExtra("FROM_SECTION") != null) {
+                if (intent.getStringExtra("FROM_SECTION") != null) {
                     Intent outIntent = new Intent(SettingsActivity.this, SectionActivity.class);
 
-                    FoodSection toSection = intent.getParcelableExtra("FROM_SECTION");
+                    String toSection = intent.getStringExtra("FROM_SECTION");
                     outIntent.putExtra("SECTION_TO_VIEW", toSection);
 
                     startActivity(outIntent);
