@@ -2,6 +2,7 @@ package com.example.mycabinet;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.mycabinet.Database.DatabaseClass;
 import com.example.mycabinet.Database.ReminderClass;
@@ -24,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifspreferences);
+
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
         btn_setDay = (Button) findViewById(R.id.btn_setDay);
         settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
@@ -33,6 +36,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         btn_setDay.setOnClickListener(this);
 //        btn_time.setOnClickListener(this);
         btn_doneReminder.setOnClickListener(this);
+
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        findViewById(R.id.back_button_from_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+
+                if (intent.getParcelableExtra("FROM_SECTION") != null) {
+                    Intent outIntent = new Intent(SettingsActivity.this, SectionActivity.class);
+
+                    FoodSection toSection = intent.getParcelableExtra("FROM_SECTION");
+                    outIntent.putExtra("SECTION_TO_VIEW", toSection);
+
+                    startActivity(outIntent);
+
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                } else {
+                    Intent outIntent = new Intent(SettingsActivity.this, MainActivity.class);
+
+                    startActivity(outIntent);
+
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                }
+            }
+        });
 
     }
     @Override

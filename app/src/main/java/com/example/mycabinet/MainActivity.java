@@ -3,6 +3,8 @@ package com.example.mycabinet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +20,9 @@ import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Kitchen kitchen;
+    private Kitchen kitchen = Kitchen.getInstance();
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
-    Button settingsActivity;
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
@@ -32,37 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settingsActivity = findViewById(R.id.sectionSettingsActivity);
-
-        settingsActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.putExtra("FROM", "kitchen");
-                startActivity(intent);
-            }
-        });
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.hasExtra("KITCHEN_TO_VIEW")) {
-                kitchen = intent.getParcelableExtra("KITCHEN_TO_VIEW");
-                Toast.makeText(this, "Kitchen received", Toast.LENGTH_SHORT).show();
-            }
-
-            String name = intent.getStringExtra("NEW_SECTION_NAME");
-            if (name != null) {
-                FoodSection section = new FoodSection(name);
-                Toast.makeText(this, "Section received: " + section.getSectionName(), Toast.LENGTH_SHORT).show();
-                Log.d("MainActivity", "onCreate: Section received: " + section.getSectionName());
-
-                kitchen.addSection(section);
-            }
-        }
-
-        if (kitchen == null) {
-            Log.d("MainActivity", "onCreate: Kitchen is null");
-            kitchen = new Kitchen();
+        if (kitchen.getSections().isEmpty()) {
+            Log.d("MainActivityDebug", "Sections are null");
             String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
             for (String sectionName : sections){
                 FoodSection section = new FoodSection(sectionName);
@@ -72,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 kitchen.addSection(section);
             }
         }
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String name = intent.getStringExtra("NEW_SECTION_NAME");
+            if (name != null) {
+                FoodSection section = new FoodSection(name);
+
+                kitchen.addSection(section);
+            }
+        }
+
         loadFragment(new ListSectionView(kitchen));
     }
 
@@ -79,41 +62,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        setAdapter();
-
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putParcelable("KITCHEN", kitchen);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.appbar_menu, menu);
+        return true;
+    }
 
-//    private void setAdapter() {
-//        List<ReminderClass> classList = databaseClass.FoodDao().getAllData();
-//        reminderAdapter = new ReminderAdapter(getApplicationContext(), classList);
-//        recyclerview.setAdapter(reminderAdapter);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.appbar_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.settings_button:
-//                Toast.makeText(this, "Settings button clicked", Toast.LENGTH_SHORT).show();
-//                goToSettingsActivity(item);
-//                return true;
-//
-//                default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+        if (id == R.id.settings_button) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
@@ -133,27 +102,6 @@ public class MainActivity extends AppCompatActivity {
     public void addFoodSection(View view) {
         Intent intent = new Intent(this, AddSectionActivity.class);
 
-        intent.putExtra("FROM_KITCHEN", kitchen);
-
-        Log.d("MainActivity", "addFoodSection button clicked");
-
         startActivity(intent);
     }
-
-//    public void onClick(View view){
-//        if (view.getId() == R.id.btn_settingsActivity){
-//            Intent intent = new Intent(this, SettingsActivity.class);
-//            startActivity(intent);
-//        }
-//    }
-//    public void onClickListener(View v){
-//
-//        if (v == settingsActivity){
-//            goToSettingsActivity(v);
-//        }
-//    }
-//    public void goToSettingsActivity(View view) {
-//        Intent intent = new Intent(this, SettingsActivity.class);
-//        startActivity(intent);
-//    }
 }

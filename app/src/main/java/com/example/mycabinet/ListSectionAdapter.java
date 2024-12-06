@@ -46,12 +46,10 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
                 if (clickedPosition != RecyclerView.NO_POSITION) {
                     FoodSection section = mSectionList.get(clickedPosition);
 
-                    Toast.makeText(mActivity, "Section clicked: " + section.getSectionName(), Toast.LENGTH_SHORT).show();
-                    Log.d("ListSectionAdapter", "onBindViewHolder: Section clicked: " + section.getSectionName());
-
                     Intent intent = new Intent(mActivity, SectionActivity.class);
 
-                    intent.putExtra("SECTION_TO_VIEW", section);
+                    intent.putExtra("SECTION_TO_VIEW", section.getSectionName());
+
                     mActivity.startActivity(intent);
                 }
             }

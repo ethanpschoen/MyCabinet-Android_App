@@ -7,40 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".SectionActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/sectionFragmentContainerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/addFoodButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="addFoodItem"
-        android:text="Add Food Item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sectionFragmentContainerView"
-        app:layout_constraintVertical_bias="0.906" />
+        <include
+            android:id="@+id/section_toolbar"
+            layout="@layout/section_toolbar" />
 
-    <Button
-        android:id="@+id/sectionSettingsActivity"
-        android:layout_width="100dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="16dp"
-        android:text="Settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/sectionFragmentContainerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/addFoodButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="addFoodItem"
+            android:text="Add Food Item" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

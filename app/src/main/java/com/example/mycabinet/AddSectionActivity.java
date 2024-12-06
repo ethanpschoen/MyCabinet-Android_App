@@ -19,6 +19,7 @@ public class AddSectionActivity extends AppCompatActivity {
 
     EditText sectionName;
     Button addButton;
+    Button cancelButton;
 
     int NAME_CHAR_LIMIT = 30;
 
@@ -27,10 +28,9 @@ public class AddSectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_section);
 
-        Log.d("AddSectionActivity", "onCreate: started");
-
         Intent intent = getIntent();
-        Kitchen kitchen = intent.getParcelableExtra("FROM_KITCHEN");
+
+        Kitchen kitchen = Kitchen.getInstance();
 
         String[] sections = new String[kitchen.getSections().size()];
         for (int i = 0; i < kitchen.getSections().size(); i++){
@@ -38,6 +38,16 @@ public class AddSectionActivity extends AppCompatActivity {
         }
 
         sectionName = findViewById(R.id.section_name);
+
+        cancelButton = findViewById(R.id.cancel_section_button);
+
+        cancelButton.setOnClickListener(view -> {
+            Intent outIntent = new Intent(this, MainActivity.class);
+            startActivity(outIntent);
+
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
         addButton = findViewById(R.id.add_section_button);
 
         addButton.setOnClickListener(view -> {
@@ -55,7 +65,6 @@ public class AddSectionActivity extends AppCompatActivity {
                 Intent outIntent = new Intent(this, MainActivity.class);
 
                 outIntent.putExtra("NEW_SECTION_NAME", name);
-                outIntent.putExtra("KITCHEN_TO_VIEW", kitchen);
 
                 startActivity(outIntent);
             }

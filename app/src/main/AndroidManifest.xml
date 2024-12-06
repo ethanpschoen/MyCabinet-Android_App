@@ -19,11 +19,11 @@
             android:name=".AddItemActivity"
             android:exported="false" />
         <activity
-            android:name=".SectionActivity" />
+            android:name=".SectionActivity"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".SettingsActivity" />
-        <activity android:name=".FoodItem" />
-        <activity android:name=".FoodSection" />
+            android:name=".SettingsActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

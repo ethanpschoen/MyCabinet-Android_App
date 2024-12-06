@@ -6,6 +6,10 @@
     android:orientation="vertical"
     tools:context=".Preferences">
 
+    <include
+        android:id="@+id/settings_toolbar"
+        layout="@layout/settings_toolbar" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

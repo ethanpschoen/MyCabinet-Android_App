@@ -25,6 +25,7 @@ public class AddItemActivity extends AppCompatActivity {
     EditText foodDay;
     EditText foodYear;
     Button addButton;
+    Button cancelButton;
 
     int NAME_CHAR_LIMIT = 30;
     int NOTES_CHAR_LIMIT = 100;
@@ -35,13 +36,23 @@ public class AddItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         Intent inIntent = getIntent();
-        FoodSection toSection = inIntent.getParcelableExtra("FROM_SECTION");
+        String toSection = inIntent.getStringExtra("FROM_SECTION");
 
         foodName = findViewById(R.id.food_name);
         foodNotes = findViewById(R.id.food_notes);
         foodMonth = findViewById(R.id.food_month);
         foodDay = findViewById(R.id.food_day);
         foodYear = findViewById(R.id.food_year);
+
+        cancelButton = findViewById(R.id.cancel_item_button);
+        cancelButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SectionActivity.class);
+            intent.putExtra("SECTION_TO_VIEW", toSection);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
         addButton = findViewById(R.id.add_item_button);
 
         addButton.setOnClickListener(view -> {
@@ -95,7 +106,7 @@ public class AddItemActivity extends AppCompatActivity {
                 Log.d("AddItemActivity", "Valid name given");
 
                 intent.putExtra("SECTION_TO_VIEW", toSection);
-                Log.d("AddItemActivity", "Section to view given: " + toSection.getSectionName());
+                Log.d("AddItemActivity", "Section to view given: " + toSection);
 
                 startActivity(intent);
             }

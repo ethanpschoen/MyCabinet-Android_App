@@ -5,18 +5,36 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-public class Kitchen implements Parcelable {
+public class Kitchen {
+
+    private static Kitchen instance;
 
     private ArrayList<FoodSection> sections;
     private Preferences settings;
 
-    public Kitchen() {
+    private Kitchen() {
         sections = new ArrayList<FoodSection>();
         settings = new Preferences();
     }
 
+    public static Kitchen getInstance() {
+        if (instance == null) {
+            instance = new Kitchen();
+        }
+        return instance;
+    }
+
     public void addSection(FoodSection section) {
         sections.add(section);
+    }
+
+    public FoodSection getSection(String name) {
+        for (FoodSection section : sections) {
+            if (section.getSectionName().equals(name)) {
+                return section;
+            }
+        }
+        return null;
     }
 
     public void removeSection(FoodSection section) {
@@ -38,32 +56,4 @@ public class Kitchen implements Parcelable {
     public Preferences getSettings() {
         return settings;
     }
-
-    protected Kitchen(Parcel in) {
-        sections = in.createTypedArrayList(FoodSection.CREATOR);
-        settings = in.readParcelable(Preferences.class.getClassLoader());
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(sections);
-        dest.writeParcelable(settings, flags);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Kitchen> CREATOR = new Creator<Kitchen>() {
-        @Override
-        public Kitchen createFromParcel(Parcel in) {
-            return new Kitchen(in);
-        }
-
-        @Override
-        public Kitchen[] newArray(int size) {
-            return new Kitchen[size];
-        }
-    };
 }
