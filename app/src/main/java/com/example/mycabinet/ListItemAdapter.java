@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +55,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
                     notifyItemRangeChanged(currentPosition, mItemList.size());
 
                     mSection.removeFoodItem(clickedItem);
+
+                    Toast.makeText(mActivity, "Item deleted: " + clickedItem.getItemName(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

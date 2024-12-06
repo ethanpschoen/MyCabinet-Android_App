@@ -34,15 +34,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (kitchen.getSections().isEmpty()) {
-            Log.d("MainActivityDebug", "Sections are null");
-            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
-            for (String sectionName : sections){
-                FoodSection section = new FoodSection(sectionName);
-                for (int i = 0; i < 10; i++){
-                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
-                }
-                kitchen.addSection(section);
-            }
+//            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
+//            for (String sectionName : sections){
+//                FoodSection section = new FoodSection(sectionName);
+//                for (int i = 0; i < 10; i++){
+//                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+//                }
+//                kitchen.addSection(section);
+//            }
         }
 
         Intent intent = getIntent();
@@ -52,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 FoodSection section = new FoodSection(name);
 
                 kitchen.addSection(section);
+
+                Toast.makeText(this, "Section added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
 

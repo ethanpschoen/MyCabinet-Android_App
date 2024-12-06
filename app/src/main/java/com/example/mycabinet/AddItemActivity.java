@@ -92,9 +92,6 @@ public class AddItemActivity extends AppCompatActivity {
                 }
             }
             if (isValid) {
-                // method to return to MainActivity with new FoodItem
-                Toast.makeText(this, "Valid item", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(this, SectionActivity.class);
 
                 intent.putExtra("NAME", name);

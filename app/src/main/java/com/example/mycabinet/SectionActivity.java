@@ -83,6 +83,8 @@ public class SectionActivity extends AppCompatActivity {
                 FoodItem item = new FoodItem(name, LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)), notes);
 
                 section.addFoodItem(item);
+
+                Toast.makeText(this, "Item added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
         printItems(section.getSectionItems());

@@ -75,6 +75,8 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
 
                     Kitchen kitchen = Kitchen.getInstance();
                     kitchen.removeSection(section);
+
+                    Toast.makeText(mActivity, "Section deleted: " + clickedSection.getSectionName(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
