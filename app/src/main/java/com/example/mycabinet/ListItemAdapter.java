@@ -13,9 +13,9 @@ import java.util.List;
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolder> {
 
     private List<FoodItem> mItemList;
-    private MainActivity mActivity;
+    private SectionActivity mActivity;
 
-    public ListItemAdapter(MainActivity activity, List<FoodItem> itemList) {
+    public ListItemAdapter(SectionActivity activity, List<FoodItem> itemList) {
         mItemList = itemList;
         mActivity = activity;
     }
@@ -42,7 +42,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
         return mItemList.size();
     }
 
-    public class ListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ListItemHolder extends RecyclerView.ViewHolder {
 
         TextView mName;
         TextView mDate;
@@ -52,12 +52,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
             mName = view.findViewById(R.id.item_name);
             mDate = view.findViewById(R.id.item_date);
             view.setClickable(true);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mActivity.showSection(getBindingAdapterPosition());
         }
     }
 }

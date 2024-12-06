@@ -27,8 +27,8 @@ public class ListItemView extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list_item_view, container, false);
 
-        if (getActivity() instanceof MainActivity) {
-            MainActivity activity = (MainActivity) getActivity();
+        if (getActivity() instanceof SectionActivity) {
+            SectionActivity activity = (SectionActivity) getActivity();
 
             recyclerView = view.findViewById(R.id.item_list);
             adapter = new ListItemAdapter(activity, section.getSectionItems());

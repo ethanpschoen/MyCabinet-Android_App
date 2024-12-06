@@ -3,6 +3,7 @@ package com.example.mycabinet;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,6 +33,9 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        Intent inIntent = getIntent();
+        FoodSection toSection = inIntent.getParcelableExtra("FROM_SECTION");
 
         foodName = findViewById(R.id.food_name);
         foodNotes = findViewById(R.id.food_notes);
@@ -80,13 +84,18 @@ public class AddItemActivity extends AppCompatActivity {
                 // method to return to MainActivity with new FoodItem
                 Toast.makeText(this, "Valid item", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, SectionActivity.class);
 
                 intent.putExtra("NAME", name);
                 intent.putExtra("NOTES", notes);
                 intent.putExtra("MONTH", month_string);
                 intent.putExtra("DAY", day_string);
                 intent.putExtra("YEAR", year_string);
+
+                Log.d("AddItemActivity", "Valid name given");
+
+                intent.putExtra("SECTION_TO_VIEW", toSection);
+                Log.d("AddItemActivity", "Section to view given: " + toSection.getSectionName());
 
                 startActivity(intent);
             }

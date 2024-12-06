@@ -26,6 +26,14 @@ public class AddSectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_section);
 
+        Intent intent = getIntent();
+        Kitchen kitchen = intent.getParcelableExtra("FROM_KITCHEN");
+
+        String[] sections = new String[kitchen.getSections().size()];
+        for (int i = 0; i < kitchen.getSections().size(); i++){
+            sections[i] = kitchen.getSections().get(i).getSectionName();
+        }
+
         sectionName = findViewById(R.id.section_name);
         addButton = findViewById(R.id.add_section_button);
 
@@ -36,17 +44,28 @@ public class AddSectionActivity extends AppCompatActivity {
                 createDialog("Invalid name", "Enter a name for the section");
             } else if (name.length() > NAME_CHAR_LIMIT) {
                 createDialog("Invalid name", "Enter a shorter name for the section (Max 30 characters)");
+            } else if (isRepeatName(name, sections)) {
+                createDialog("Invalid name", "Section already exists");
             } else {
                 // method to return to MainActivity with new Section
                 Toast.makeText(this, "Valid section", Toast.LENGTH_SHORT).show();
+                Intent outIntent = new Intent(this, MainActivity.class);
 
-                Intent intent = new Intent(this, MainActivity.class);
+                outIntent.putExtra("NEW_SECTION_NAME", name);
+                outIntent.putExtra("KITCHEN_TO_VIEW", kitchen);
 
-                intent.putExtra("NAME", name);
-
-                startActivity(intent);
+                startActivity(outIntent);
             }
         });
+    }
+
+    private boolean isRepeatName(String name, String[] sections) {
+        for (String section : sections) {
+            if (section.equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void createDialog(String title, String message) {

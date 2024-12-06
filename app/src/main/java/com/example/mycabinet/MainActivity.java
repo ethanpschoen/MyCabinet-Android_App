@@ -3,30 +3,22 @@ package com.example.mycabinet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycabinet.Database.DatabaseClass;
-import com.example.mycabinet.Database.ReminderClass;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Kitchen kitchen = new Kitchen();
+    private Kitchen kitchen;
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
     Button settingsActivity;
@@ -40,30 +32,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settingsActivity = findViewById(R.id.settingsActivity);
+        settingsActivity = findViewById(R.id.sectionSettingsActivity);
 
         settingsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra("FROM", "kitchen");
                 startActivity(intent);
             }
         });
 
         Intent intent = getIntent();
         if (intent != null) {
-            String name = intent.getStringExtra("NAME");
-            String notes = intent.getStringExtra("NOTES");
-            int month = intent.getIntExtra("MONTH", LocalDate.now().getMonthValue());
-            int day = intent.getIntExtra("DAY", LocalDate.now().getDayOfMonth());
-            int year = intent.getIntExtra("YEAR", LocalDate.now().getYear());
+            if (intent.hasExtra("KITCHEN_TO_VIEW")) {
+                kitchen = intent.getParcelableExtra("KITCHEN_TO_VIEW");
+                Toast.makeText(this, "Kitchen received", Toast.LENGTH_SHORT).show();
+            }
 
-            FoodItem item = new FoodItem(name, LocalDate.of(year, month, day), notes);
-            Toast.makeText(this, "Item received: " + item.getItemName(), Toast.LENGTH_SHORT).show();
+            String name = intent.getStringExtra("NEW_SECTION_NAME");
+            if (name != null) {
+                FoodSection section = new FoodSection(name);
+                Toast.makeText(this, "Section received: " + section.getSectionName(), Toast.LENGTH_SHORT).show();
+
+                kitchen.addSection(section);
+            }
         }
 
-        if (savedInstanceState == null) {
-            loadFragment(new ListSectionView(kitchen));
+        if (kitchen == null) {
+            kitchen = new Kitchen();
             String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
             for (String sectionName : sections){
                 FoodSection section = new FoodSection(sectionName);
@@ -73,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 kitchen.addSection(section);
             }
         }
+        loadFragment(new ListSectionView(kitchen));
     }
 
 
@@ -81,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 //        setAdapter();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("KITCHEN", kitchen);
     }
 
 //    private void setAdapter() {
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, fragment)
+                    .replace(R.id.kitchenFragmentContainerView, fragment)
                     .commit();
             return true;
         }
@@ -125,8 +129,11 @@ public class MainActivity extends AppCompatActivity {
         FoodSection section = kitchen.getSections().get(position);
     }
 
-    public void addFoodItem(View view) {
-        Intent intent = new Intent(this, AddItemActivity.class);
+    public void addFoodSection(View view) {
+        Intent intent = new Intent(this, AddSectionActivity.class);
+
+        intent.putExtra("FROM_KITCHEN", kitchen);
+
         startActivity(intent);
     }
 

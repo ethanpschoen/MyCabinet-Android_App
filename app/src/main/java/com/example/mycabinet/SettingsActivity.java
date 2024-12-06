@@ -2,21 +2,14 @@ package com.example.mycabinet;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mycabinet.Database.DatabaseClass;
 import com.example.mycabinet.Database.ReminderClass;
@@ -33,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.notifspreferences);
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
         btn_setDay = (Button) findViewById(R.id.btn_setDay);
-        settingsActivity = (Button) findViewById(R.id.settingsActivity);
+        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
         btn_doneReminder = (Button) findViewById(R.id.btn_doneReminder);
 
         btn_setReminder.setOnClickListener(this);
