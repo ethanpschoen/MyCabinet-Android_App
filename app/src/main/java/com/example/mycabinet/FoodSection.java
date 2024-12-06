@@ -1,11 +1,13 @@
 package com.example.mycabinet;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class FoodSection{
+public class FoodSection implements Parcelable {
 
 
     private String sectionName;
@@ -15,8 +17,7 @@ public class FoodSection{
     private int sectionSize;
 
     // Required empty public constructor
-    public FoodSection() {
-    }
+    public FoodSection() {}
 
     public FoodSection(String sectionName) {
         this.sectionName = sectionName;
@@ -35,8 +36,6 @@ public class FoodSection{
     }
 
     public ArrayList<FoodItem> getSectionItems() {
-        System.out.println(sectionItems.get(0).getItemName());
-        System.out.println(sectionItems.toString());
         return sectionItems;
     }
 
@@ -71,7 +70,6 @@ public class FoodSection{
     public void addFoodItem(FoodItem item) {
         sectionItems.add(item);
         sectionSize++;
-        System.out.println(sectionItems.get(0).getItemName());
     }
 
     public void removeFoodItem(FoodItem item) {
@@ -83,4 +81,36 @@ public class FoodSection{
         sectionItems.clear();
         sectionSize = 0;
     }
+
+    protected FoodSection(Parcel in) {
+        sectionName = in.readString();
+        sectionItems = in.createTypedArrayList(FoodItem.CREATOR);
+        sectionColor = in.readString();
+        sectionSize = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(sectionName);
+        dest.writeTypedList(sectionItems);
+        dest.writeString(sectionColor);
+        dest.writeInt(sectionSize);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<FoodSection> CREATOR = new Creator<FoodSection>() {
+        @Override
+        public FoodSection createFromParcel(Parcel in) {
+            return new FoodSection(in);
+        }
+
+        @Override
+        public FoodSection[] newArray(int size) {
+            return new FoodSection[size];
+        }
+    };
 }

@@ -3,6 +3,7 @@ package com.example.mycabinet;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class AddItemActivity extends AppCompatActivity {
     EditText foodDay;
     EditText foodYear;
     Button addButton;
+    Button cancelButton;
 
     int NAME_CHAR_LIMIT = 30;
     int NOTES_CHAR_LIMIT = 100;
@@ -33,11 +35,24 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        Intent inIntent = getIntent();
+        String toSection = inIntent.getStringExtra("FROM_SECTION");
+
         foodName = findViewById(R.id.food_name);
         foodNotes = findViewById(R.id.food_notes);
         foodMonth = findViewById(R.id.food_month);
         foodDay = findViewById(R.id.food_day);
         foodYear = findViewById(R.id.food_year);
+
+        cancelButton = findViewById(R.id.cancel_item_button);
+        cancelButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SectionActivity.class);
+            intent.putExtra("SECTION_TO_VIEW", toSection);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
         addButton = findViewById(R.id.add_item_button);
 
         addButton.setOnClickListener(view -> {
@@ -80,13 +95,18 @@ public class AddItemActivity extends AppCompatActivity {
                 // method to return to MainActivity with new FoodItem
                 Toast.makeText(this, "Valid item", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, SectionActivity.class);
 
                 intent.putExtra("NAME", name);
                 intent.putExtra("NOTES", notes);
                 intent.putExtra("MONTH", month_string);
                 intent.putExtra("DAY", day_string);
                 intent.putExtra("YEAR", year_string);
+
+                Log.d("AddItemActivity", "Valid name given");
+
+                intent.putExtra("SECTION_TO_VIEW", toSection);
+                Log.d("AddItemActivity", "Section to view given: " + toSection);
 
                 startActivity(intent);
             }

@@ -1,5 +1,6 @@
 package com.example.mycabinet;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,9 @@ import java.util.List;
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolder> {
 
     private List<FoodItem> mItemList;
-    private MainActivity mActivity;
+    private SectionActivity mActivity;
 
-    public ListItemAdapter(MainActivity activity, List<FoodItem> itemList) {
+    public ListItemAdapter(SectionActivity activity, List<FoodItem> itemList) {
         mItemList = itemList;
         mActivity = activity;
     }
@@ -24,15 +25,21 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
     @Override
     public ListItemAdapter.ListItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        Log.d("ListItemAdapter", "onCreateViewHolder: Before inflation");
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.itemlistitem, parent, false);
+
+        Log.d("ListItemAdapter", "onCreateViewHolder: After inflation");
 
         return new ListItemHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ListItemAdapter.ListItemHolder holder, int position) {
+        Log.d("ListItemAdapter", "onBindViewHolder: At ListItemAdapter");
         FoodItem item = mItemList.get(position);
+        Log.d("ListItemAdapter", "onBindViewHolder: Item name: " + item.getItemName());
         holder.mName.setText(item.getItemName());
         holder.mDate.setText(item.getExpirationDate().toString());
     }
@@ -42,7 +49,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
         return mItemList.size();
     }
 
-    public class ListItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ListItemHolder extends RecyclerView.ViewHolder {
 
         TextView mName;
         TextView mDate;
@@ -52,12 +59,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
             mName = view.findViewById(R.id.item_name);
             mDate = view.findViewById(R.id.item_date);
             view.setClickable(true);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mActivity.showSection(getBindingAdapterPosition());
         }
     }
 }

@@ -1,8 +1,12 @@
 package com.example.mycabinet;
+
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,12 +46,11 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
                 if (clickedPosition != RecyclerView.NO_POSITION) {
                     FoodSection section = mSectionList.get(clickedPosition);
 
-                    Fragment fragment = new ListItemView(section);
+                    Intent intent = new Intent(mActivity, SectionActivity.class);
 
-                    mActivity.getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainerView, fragment)
-                            .commit();
+                    intent.putExtra("SECTION_TO_VIEW", section.getSectionName());
+
+                    mActivity.startActivity(intent);
                 }
             }
         });
@@ -70,6 +73,7 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
             view.setClickable(true);
             view.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View v) {
             mActivity.showSection(getAdapterPosition());

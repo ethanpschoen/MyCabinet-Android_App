@@ -18,19 +18,14 @@
         <activity
             android:name=".AddItemActivity"
             android:exported="false" />
-        <activity android:name=".FoodItem" />
-        <activity android:name=".FoodSection" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".SectionActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
         </activity>
     </application>

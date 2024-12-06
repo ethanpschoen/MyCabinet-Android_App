@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 public class ListSectionView extends Fragment {
 
     private RecyclerView recyclerView;
-    private Kitchen kitchen = new Kitchen();
+    private Kitchen kitchen;
     private ListSectionAdapter adapter;
 
     public ListSectionView(Kitchen kitchen) {
