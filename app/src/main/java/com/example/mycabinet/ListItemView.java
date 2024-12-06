@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,15 @@ public class ListItemView extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list_item_view, container, false);
 
+        Log.d("ListItemView", "onCreateView: At ListItemView");
+
         if (getActivity() instanceof SectionActivity) {
             SectionActivity activity = (SectionActivity) getActivity();
 
             recyclerView = view.findViewById(R.id.item_list);
+            Log.d("ListItemView", "onCreateView: At recyclerView");
             adapter = new ListItemAdapter(activity, section.getSectionItems());
+            Log.d("ListItemView", "onCreateView: At adapter");
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
 
             recyclerView.setLayoutManager(layoutManager);

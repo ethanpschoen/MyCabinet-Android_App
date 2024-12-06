@@ -29,8 +29,8 @@ public class SectionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        Toast.makeText(this, "Section Activity", Toast.LENGTH_SHORT).show();
-//        Log.d("SectionActivity", "onCreate: Section Activity");
+        Toast.makeText(this, "Section Activity", Toast.LENGTH_SHORT).show();
+        Log.d("SectionActivity", "onCreate: Section Activity");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_section);
@@ -83,6 +83,7 @@ public class SectionActivity extends AppCompatActivity {
             Log.d("SectionActivity", "onCreate: Intent is null");
         }
 
+        Log.d("SectionActivity", "onCreate: Loading fragment");
         loadFragment(new ListItemView(section));
     }
 

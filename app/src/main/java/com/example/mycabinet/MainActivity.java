@@ -54,12 +54,14 @@ public class MainActivity extends AppCompatActivity {
             if (name != null) {
                 FoodSection section = new FoodSection(name);
                 Toast.makeText(this, "Section received: " + section.getSectionName(), Toast.LENGTH_SHORT).show();
+                Log.d("MainActivity", "onCreate: Section received: " + section.getSectionName());
 
                 kitchen.addSection(section);
             }
         }
 
         if (kitchen == null) {
+            Log.d("MainActivity", "onCreate: Kitchen is null");
             kitchen = new Kitchen();
             String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
             for (String sectionName : sections){
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new ListSectionView(kitchen));
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -81,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("KITCHEN", kitchen);
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelable("KITCHEN", kitchen);
+//    }
 
 //    private void setAdapter() {
 //        List<ReminderClass> classList = databaseClass.FoodDao().getAllData();
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddSectionActivity.class);
 
         intent.putExtra("FROM_KITCHEN", kitchen);
+
+        Log.d("MainActivity", "addFoodSection button clicked");
 
         startActivity(intent);
     }

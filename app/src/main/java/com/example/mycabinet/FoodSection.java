@@ -36,8 +36,6 @@ public class FoodSection implements Parcelable {
     }
 
     public ArrayList<FoodItem> getSectionItems() {
-        System.out.println(sectionItems.get(0).getItemName());
-        System.out.println(sectionItems.toString());
         return sectionItems;
     }
 
