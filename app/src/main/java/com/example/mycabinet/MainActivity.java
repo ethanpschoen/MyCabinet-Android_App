@@ -34,14 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (kitchen.getSections().isEmpty()) {
-//            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
-//            for (String sectionName : sections){
-//                FoodSection section = new FoodSection(sectionName);
-//                for (int i = 0; i < 10; i++){
-//                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
-//                }
-//                kitchen.addSection(section);
-//            }
+            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
+            int count = 0;
+            for (String sectionName : sections){
+                FoodSection section = new FoodSection(sectionName);
+                for (int i = 0; i < 10 - count; i++){
+                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
+                }
+                kitchen.addSection(section);
+                count += 1;
+            }
         }
 
         Intent intent = getIntent();

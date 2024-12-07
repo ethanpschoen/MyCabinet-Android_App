@@ -89,13 +89,13 @@ public class AddItemActivity extends AppCompatActivity {
                     // dialog box, enter valid date
                     createDialog("Invalid date", "Enter a valid date for the food item");
                     isValid = false;
-                }
-
-                LocalDate date = LocalDate.of(year, month, day);
-                if (date.isBefore(LocalDate.now())) {
-                    // dialog box, enter future date
-                    createDialog("Invalid date", "Enter a future date for the food item");
-                    isValid = false;
+                } else {
+                    LocalDate date = LocalDate.of(year, month, day);
+                    if (date.isBefore(LocalDate.now())) {
+                        // dialog box, enter future date
+                        createDialog("Invalid date", "Enter a future date for the food item");
+                        isValid = false;
+                    }
                 }
             }
             if (isValid) {
