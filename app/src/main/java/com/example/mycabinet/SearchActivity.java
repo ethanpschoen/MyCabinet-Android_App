@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -46,6 +47,13 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             query = intent.getStringExtra("QUERY");
+        }
+
+        TextView toolbarTitle = findViewById(R.id.search_title);
+        if (query.isEmpty()) {
+            toolbarTitle.setText("All Items (By Date)");
+        } else {
+            toolbarTitle.setText("Search Results: " + query);
         }
 
         // Set up the back button
