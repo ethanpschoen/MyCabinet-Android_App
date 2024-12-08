@@ -29,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
         btn_setDay = (Button) findViewById(R.id.btn_setDay);
-        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
+//        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
         btn_doneReminder = (Button) findViewById(R.id.btn_doneReminder);
 
         btn_setReminder.setOnClickListener(this);

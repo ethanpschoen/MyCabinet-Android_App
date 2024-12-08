@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_list" >
+        <item>1 Day</item>
+        <item>2 Days</item>
+        <item>3 Days</item>
+        <item>5 Days</item>
+        <item>7 Days</item>
+    </string-array>
+</resources>
+
+
