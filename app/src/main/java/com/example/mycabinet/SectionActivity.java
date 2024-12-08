@@ -7,9 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +26,11 @@ import java.util.ArrayList;
 
 public class SectionActivity extends AppCompatActivity {
 
-    private Kitchen kitchen;
     private FoodSection section;
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
+    private ToggleButton toggleButton;
+
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
@@ -87,7 +91,29 @@ public class SectionActivity extends AppCompatActivity {
                 Toast.makeText(this, "Item added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
-        printItems(section.getSectionItems());
+
+        toggleButton = findViewById(R.id.sort_item_button);
+        toggleButton.setChecked(true);
+
+        toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ItemSort sorter = new ItemSort(section.getSectionItems());
+                    sorter.sortByName();
+
+                    loadFragment(new ListItemView(section));
+                } else {
+                    ItemSort sorter = new ItemSort(section.getSectionItems());
+                    sorter.sortByDate();
+
+                    loadFragment(new ListItemView(section));
+                }
+            }
+        });
+
+        ItemSort sorter = new ItemSort(section.getSectionItems());
+        sorter.sortByName();
 
         loadFragment(new ListItemView(section));
     }

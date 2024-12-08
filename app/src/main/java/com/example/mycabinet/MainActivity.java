@@ -7,9 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private Kitchen kitchen = Kitchen.getInstance();
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
+    private ToggleButton toggleButton;
+
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
@@ -32,19 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (kitchen.getSections().isEmpty()) {
-            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
-            int count = 0;
-            for (String sectionName : sections){
-                FoodSection section = new FoodSection(sectionName);
-                for (int i = 0; i < 10 - count; i++){
-                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
-                }
-                kitchen.addSection(section);
-                count += 1;
-            }
-        }
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -57,6 +49,29 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Section added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
+
+        toggleButton = findViewById(R.id.sort_section_button);
+        toggleButton.setChecked(true);
+
+        toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SectionSort sorter = new SectionSort(kitchen.getSections());
+                    sorter.sortByName();
+
+                    loadFragment(new ListSectionView(kitchen));
+                } else {
+                    SectionSort sorter = new SectionSort(kitchen.getSections());
+                    sorter.sortBySize();
+
+                    loadFragment(new ListSectionView(kitchen));
+                }
+            }
+        });
+
+        SectionSort sorter = new SectionSort(kitchen.getSections());
+        sorter.sortByName();
 
         loadFragment(new ListSectionView(kitchen));
     }
