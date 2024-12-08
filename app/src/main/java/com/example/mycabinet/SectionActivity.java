@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mycabinet.Database.DatabaseClass;
 
 import java.time.LocalDate;
 
@@ -42,8 +41,8 @@ public class SectionActivity extends AppCompatActivity {
     private ListSectionAdapter adapter;
 
     EditText foodName;
-    ReminderAdapter reminderAdapter;
-    DatabaseClass DatabaseClass;
+
+
 
 
     @Override

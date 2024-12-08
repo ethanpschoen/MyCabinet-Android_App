@@ -36,7 +36,7 @@ public class FoodItem {
     }
 
 
-    // Getters and setters
+    // Getters and setters to set and get the member variables for food item
 
     public String getItemName() {
         return itemName;

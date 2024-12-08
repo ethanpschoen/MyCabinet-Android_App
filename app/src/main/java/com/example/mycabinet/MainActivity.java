@@ -17,12 +17,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mycabinet.Database.DatabaseClass;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.Objects;
 
 /*
 The MainActivity is the core Activity of the app.
@@ -46,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ListSectionAdapter adapter;
 
     EditText foodName;
-    ReminderAdapter reminderAdapter;
-    DatabaseClass DatabaseClass;
+
 
 
     @Override
