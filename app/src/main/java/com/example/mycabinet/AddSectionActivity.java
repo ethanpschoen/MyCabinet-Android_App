@@ -60,8 +60,6 @@ public class AddSectionActivity extends AppCompatActivity {
             } else if (isRepeatName(name, sections)) {
                 createDialog("Invalid name", "Section already exists");
             } else {
-                // method to return to MainActivity with new Section
-                Toast.makeText(this, "Valid section", Toast.LENGTH_SHORT).show();
                 Intent outIntent = new Intent(this, MainActivity.class);
 
                 outIntent.putExtra("NEW_SECTION_NAME", name);

@@ -3,6 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/app_bar_by_date"
+        android:icon="@drawable/clock_icon"
+        android:title="Date"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:searchViewStyle="@style/CustomSearchViewStyle"
+        app:searchIcon="@drawable/search_icon"
+        app:closeIcon="@drawable/search_icon"
+        app:commitIcon="@drawable/search_icon"
+        app:goIcon="@drawable/search_icon"
+        app:searchHintIcon="@drawable/search_icon"
+        app:voiceIcon="@drawable/search_icon"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/settings_button"
         android:icon="@drawable/settings_icon"
         android:title="@string/goToSettings"

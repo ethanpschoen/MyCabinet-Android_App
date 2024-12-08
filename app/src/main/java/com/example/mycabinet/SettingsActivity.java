@@ -25,7 +25,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifspreferences);
+        setContentView(R.layout.notifs_preferences);
 
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
         btn_setDay = (Button) findViewById(R.id.btn_setDay);
@@ -49,11 +49,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             public void onClick(View view) {
                 Intent intent = getIntent();
 
-                if (intent.getParcelableExtra("FROM_SECTION") != null) {
+                if (intent.getStringExtra("FROM_SECTION") != null) {
                     Intent outIntent = new Intent(SettingsActivity.this, SectionActivity.class);
 
-                    FoodSection toSection = intent.getParcelableExtra("FROM_SECTION");
+                    String toSection = intent.getStringExtra("FROM_SECTION");
                     outIntent.putExtra("SECTION_TO_VIEW", toSection);
+
+                    startActivity(outIntent);
+
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                } else if (intent.getStringExtra("QUERY_FROM_SEARCH") != null) {
+                    Intent outIntent = new Intent(SettingsActivity.this, SearchActivity.class);
+
+                    String query = intent.getStringExtra("QUERY_FROM_SEARCH");
+                    outIntent.putExtra("QUERY", query);
 
                     startActivity(outIntent);
 

@@ -3,13 +3,13 @@ package com.example.mycabinet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 public class SectionActivity extends AppCompatActivity {
 
-    private Kitchen kitchen;
     private FoodSection section;
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
+
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
@@ -45,7 +45,7 @@ public class SectionActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.back_button_from_section).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SectionActivity.this, MainActivity.class);
@@ -59,7 +59,7 @@ public class SectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SectionActivity.this, SettingsActivity.class);
-                intent.putExtra("FROM_SECTION", section);
+                intent.putExtra("FROM_SECTION", section.getSectionName());
                 startActivity(intent);
             }
         });
@@ -83,9 +83,33 @@ public class SectionActivity extends AppCompatActivity {
                 FoodItem item = new FoodItem(name, LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)), notes);
 
                 section.addFoodItem(item);
+
+                Toast.makeText(this, "Item added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
-        printItems(section.getSectionItems());
+
+        ToggleButton toggleButton = findViewById(R.id.sort_item_button);
+        toggleButton.setChecked(true);
+
+        toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ItemSort sorter = new ItemSort(section.getSectionItems());
+                    sorter.sortByName();
+
+                    loadFragment(new ListItemView(section));
+                } else {
+                    ItemSort sorter = new ItemSort(section.getSectionItems());
+                    sorter.sortByDate();
+
+                    loadFragment(new ListItemView(section));
+                }
+            }
+        });
+
+        ItemSort sorter = new ItemSort(section.getSectionItems());
+        sorter.sortByName();
 
         loadFragment(new ListItemView(section));
     }
@@ -101,21 +125,11 @@ public class SectionActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showItem(int position) {
-        FoodItem item = section.getSectionItems().get(position);
-    }
-
     public void addFoodItem(View view) {
         Intent intent = new Intent(this, AddItemActivity.class);
 
         intent.putExtra("FROM_SECTION", section.getSectionName());
 
         startActivity(intent);
-    }
-
-    public void printItems(ArrayList<FoodItem> items) {
-        for (FoodItem item : items) {
-            Log.d("SectionActivity", item.getItemName());
-        }
     }
 }

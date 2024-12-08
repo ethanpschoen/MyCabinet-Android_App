@@ -12,30 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListItemHolder> {
+public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.SearchItemHolder> {
 
-    private FoodSection mSection;
     private ArrayList<FoodItem> mItemList;
-    private SectionActivity mActivity;
+    private SearchActivity mActivity;
 
-    public ListItemAdapter(SectionActivity activity, FoodSection section) {
-        mSection = section;
-        mItemList = section.getSectionItems();
+    public SearchItemAdapter(SearchActivity activity, ArrayList<FoodItem> items) {
+        mItemList = items;
         mActivity = activity;
     }
 
     @NonNull
     @Override
-    public ListItemAdapter.ListItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchItemAdapter.SearchItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_item, parent, false);
 
-        return new ListItemHolder(itemView);
+        return new SearchItemHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListItemAdapter.ListItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchItemAdapter.SearchItemHolder holder, int position) {
         FoodItem item = mItemList.get(position);
 
         holder.mName.setText(item.getItemName());
@@ -54,7 +52,9 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
                     notifyItemRemoved(currentPosition);
                     notifyItemRangeChanged(currentPosition, mItemList.size());
 
-                    mSection.removeFoodItem(clickedItem);
+                    Kitchen kitchen = Kitchen.getInstance();
+
+                    kitchen.removeItem(clickedItem);
 
                     Toast.makeText(mActivity, "Item deleted: " + clickedItem.getItemName(), Toast.LENGTH_SHORT).show();
                 }
@@ -67,13 +67,13 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
         return mItemList.size();
     }
 
-    public class ListItemHolder extends RecyclerView.ViewHolder {
+    public class SearchItemHolder extends RecyclerView.ViewHolder {
 
         TextView mName;
         TextView mDate;
         Button deleteButton;
 
-        public ListItemHolder(View view) {
+        public SearchItemHolder(View view) {
             super(view);
             mName = view.findViewById(R.id.item_name);
             mDate = view.findViewById(R.id.item_date);

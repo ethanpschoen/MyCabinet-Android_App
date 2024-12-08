@@ -6,23 +6,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycabinet.Database.DatabaseClass;
-
-import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity {
 
     private Kitchen kitchen = Kitchen.getInstance();
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
+
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
@@ -33,18 +35,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (kitchen.getSections().isEmpty()) {
-            Log.d("MainActivityDebug", "Sections are null");
-            String[] sections = {"Fruits", "Vegetables", "Grains", "Dairy", "Meats", "Pantry", "Freezer", "Refrigerator"};
-            for (String sectionName : sections){
-                FoodSection section = new FoodSection(sectionName);
-                for (int i = 0; i < 10; i++){
-                    section.addFoodItem(new FoodItem("Item " + i, LocalDate.of(2025, 1, 1)));
-                }
-                kitchen.addSection(section);
-            }
-        }
-
         Intent intent = getIntent();
         if (intent != null) {
             String name = intent.getStringExtra("NEW_SECTION_NAME");
@@ -52,8 +42,33 @@ public class MainActivity extends AppCompatActivity {
                 FoodSection section = new FoodSection(name);
 
                 kitchen.addSection(section);
+
+                Toast.makeText(this, "Section added: " + name, Toast.LENGTH_SHORT).show();
             }
         }
+
+        ToggleButton toggleButton = findViewById(R.id.sort_section_button);
+        toggleButton.setChecked(true);
+
+        toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SectionSort sorter = new SectionSort(kitchen.getSections());
+                    sorter.sortByName();
+
+                    loadFragment(new ListSectionView(kitchen));
+                } else {
+                    SectionSort sorter = new SectionSort(kitchen.getSections());
+                    sorter.sortBySize();
+
+                    loadFragment(new ListSectionView(kitchen));
+                }
+            }
+        });
+
+        SectionSort sorter = new SectionSort(kitchen.getSections());
+        sorter.sortByName();
 
         loadFragment(new ListSectionView(kitchen));
     }
@@ -67,6 +82,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        if (searchView != null) {
+            ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+            if (searchIcon != null) {
+                searchIcon.setImageResource(R.drawable.search_icon);
+            }
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+
+                intent.putExtra("QUERY", query);
+
+                Log.d("SEARCH", "Sent Query: " + query);
+
+                startActivity(intent);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -79,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
             return true;
+        } else if (id == R.id.app_bar_by_date) {
+            Intent intent = new Intent(this, SearchActivity.class);
+
+            intent.putExtra("QUERY", "");
+
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

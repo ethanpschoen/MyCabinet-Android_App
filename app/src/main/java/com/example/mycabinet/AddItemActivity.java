@@ -89,12 +89,16 @@ public class AddItemActivity extends AppCompatActivity {
                     // dialog box, enter valid date
                     createDialog("Invalid date", "Enter a valid date for the food item");
                     isValid = false;
+                } else {
+                    LocalDate date = LocalDate.of(year, month, day);
+                    if (date.isBefore(LocalDate.now())) {
+                        // dialog box, enter future date
+                        createDialog("Invalid date", "Enter a future date for the food item");
+                        isValid = false;
+                    }
                 }
             }
             if (isValid) {
-                // method to return to MainActivity with new FoodItem
-                Toast.makeText(this, "Valid item", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(this, SectionActivity.class);
 
                 intent.putExtra("NAME", name);
