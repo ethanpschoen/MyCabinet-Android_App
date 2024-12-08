@@ -1,24 +1,34 @@
 package com.example.mycabinet;
 
-
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class FoodSection implements Parcelable {
+/*
+The FoodSection model class represents a section of the Kitchen.
+It has a unique name, a list of FoodItems, a color, an icon, and a size.
+The FoodSection is a customizable way for the Chef to organize their FoodItems.
+ */
 
+public class FoodSection {
 
+    /*
+    Member variables
+
+    sectionName: String representing the name of the section
+    sectionItems: ArrayList of FoodItem objects representing the items in the section
+    sectionColor: String representing the color of the section (not implemented yet)
+    sectionIcon: ImageView representing the icon of the section (not implemented yet)
+    sectionSize: int representing the number of items in the section
+     */
     private String sectionName;
     private ArrayList<FoodItem> sectionItems;
     private String sectionColor;
     private ImageView sectionIcon;
     private int sectionSize;
 
-    // Required empty public constructor
-    public FoodSection() {}
 
+    // Constructor to initialize the object
     public FoodSection(String sectionName) {
         this.sectionName = sectionName;
         this.sectionItems = new ArrayList<FoodItem>();
@@ -26,6 +36,9 @@ public class FoodSection implements Parcelable {
         this.sectionIcon = null;
         this.sectionSize = 0;
     }
+
+
+    // Getters and setters
 
     public String getSectionName() {
         return sectionName;
@@ -67,6 +80,9 @@ public class FoodSection implements Parcelable {
         this.sectionSize = sectionSize;
     }
 
+
+    // Methods to add and remove items from the section
+
     public void addFoodItem(FoodItem item) {
         sectionItems.add(item);
         sectionSize++;
@@ -83,36 +99,4 @@ public class FoodSection implements Parcelable {
         sectionItems.clear();
         sectionSize = 0;
     }
-
-    protected FoodSection(Parcel in) {
-        sectionName = in.readString();
-        sectionItems = in.createTypedArrayList(FoodItem.CREATOR);
-        sectionColor = in.readString();
-        sectionSize = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(sectionName);
-        dest.writeTypedList(sectionItems);
-        dest.writeString(sectionColor);
-        dest.writeInt(sectionSize);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<FoodSection> CREATOR = new Creator<FoodSection>() {
-        @Override
-        public FoodSection createFromParcel(Parcel in) {
-            return new FoodSection(in);
-        }
-
-        @Override
-        public FoodSection[] newArray(int size) {
-            return new FoodSection[size];
-        }
-    };
 }

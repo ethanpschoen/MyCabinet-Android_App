@@ -13,6 +13,9 @@
             android:id="@+id/section_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="TextView"
             android:textSize="36sp" />
 
