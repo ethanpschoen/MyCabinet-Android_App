@@ -154,20 +154,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         timePickerDialog.show();
     }
 
-//    private void selectDate(){
-//        Calendar calendar=Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        DatePickerDialog datePickerDialog=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                btn_setDay.setText(day+"/"+(month+1)+"/"+year);
-//
-//            }
-//        }, year, month, day);
-//        datePickerDialog.show();
-//    }
 
     public String FormatTime(int hour, int minute) {
         String time;

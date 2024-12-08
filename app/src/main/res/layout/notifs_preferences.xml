@@ -21,32 +21,26 @@
         android:text="Set your reminder time"
         android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/btn_doneReminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:background="@color/feldgrau"
-        android:text="Remind Me!"
-        android:textColor="@color/white" />
-
     <Spinner
         android:id="@+id/day_select_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="35dp" />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_doneReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/day_select_menu"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="20sp"
-        android:text="Show toast" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@color/feldgrau"
+        android:text="Remind Me!"
+        android:textColor="@color/white" />
+
+
+
+
 
 
     </LinearLayout>
