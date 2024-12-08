@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     Button settingsActivity, btn_setReminder, btn_setDay, btn_doneReminder;
     String timeTonotify;
     DatabaseClass databaseClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

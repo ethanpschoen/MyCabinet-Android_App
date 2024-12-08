@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
     EditText foodName;
     ReminderAdapter reminderAdapter;
     DatabaseClass DatabaseClass;
-    TextInputLayout textInputLayout = findViewById(R.id.inputLayout);
-    MaterialAutoCompleteTextView autoCompleteTextView = findViewById(R.id.inputTV);
-    MaterialButton button = findViewById(R.id.btn);
 
 
     @Override
@@ -98,17 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        // Set up the auto-complete text view for days before reminder
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Objects.requireNonNull(autoCompleteTextView.getText()).toString().isEmpty()) {
-                    textInputLayout.setError("Select how many days in advance you want a reminder");
-                } else {
-                    Toast.makeText(MainActivity.this, autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
 
         // Sort the sections by name (to start)
         SectionSort sorter = new SectionSort(kitchen.getSections());
