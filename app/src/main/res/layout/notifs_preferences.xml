@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".Preferences">
+    tools:context=".SettingsActivity">
 
     <include
         android:id="@+id/settings_toolbar"
@@ -22,16 +22,6 @@
         android:textColor="@color/black" />
 
     <Button
-        android:id="@+id/btn_setDay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginTop="25dp"
-        android:background="@color/lightgreen"
-        android:text="Remind me _ days in advance"
-        android:textColor="@color/black" />
-
-    <Button
         android:id="@+id/btn_doneReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,11 +31,18 @@
         android:text="Remind Me!"
         android:textColor="@color/white" />
 
+    <Spinner
+        android:id="@+id/day_select_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
+
     <Button
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_doneReminder"
+        android:layout_below="@id/day_select_menu"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_marginTop="20sp"

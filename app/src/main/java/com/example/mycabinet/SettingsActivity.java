@@ -5,8 +5,11 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -19,7 +22,8 @@ import com.example.mycabinet.Database.ReminderClass;
 import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
-    Button settingsActivity, btn_setReminder, btn_setDay, btn_doneReminder;
+    Button settingsActivity, btn_setReminder, btn_doneReminder;
+    Spinner btn_setDay;
     String timeTonotify;
     DatabaseClass databaseClass;
 
@@ -29,14 +33,32 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.notifs_preferences);
 
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
-        btn_setDay = (Button) findViewById(R.id.btn_setDay);
 //        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
         btn_doneReminder = (Button) findViewById(R.id.btn_doneReminder);
 
+        btn_setDay = (Spinner) findViewById(R.id.day_select_menu);
+
         btn_setReminder.setOnClickListener(this);
-        btn_setDay.setOnClickListener(this);
 //        btn_time.setOnClickListener(this);
         btn_doneReminder.setOnClickListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.options_list, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        btn_setDay.setAdapter(adapter);
+
+        btn_setDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String selectedDay = adapterView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                String selectedDay = adapterView.getItemAtPosition(0).toString();
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
@@ -81,67 +103,71 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
     @Override
     public void onClick(View v) {
-        if (v ==btn_setReminder){
+        if (v == btn_setReminder){
             selectTime();
 
         }
-        else if (v == btn_setDay){
-            selectDate();
-
-        }
+//        else if (v == btn_setDay){
+//            selectDate();
+//
+//        }
 //        else if (v == btn_time){
 //            selectTime();
 //        }
+
         else if (v == btn_doneReminder){
             submit();
         }
-
     }
 
     private void submit(){
-        if (btn_setReminder.getText().toString().equals("Set your reminder time") || btn_setDay.getText().toString().equals("Set your reminder day")){
+        if (btn_setReminder.getText().toString().equals("Set your reminder time") ||
+                btn_setDay.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a date and time for your food item", Toast.LENGTH_SHORT).show();
-    }else{
-            ReminderClass reminderClass=new ReminderClass();
+    } else {
+//            ReminderClass reminderClass=new ReminderClass();
 //            reminderClass.setFoodName(btn_setReminder.getText().toString().trim());
-            reminderClass.setFoodDate(btn_setReminder.getText().toString().trim());
-            reminderClass.setFoodTime(btn_setDay.getText().toString().trim());
-            databaseClass.foodDao().insertAll(reminderClass);
+//            reminderClass.setFoodDate(btn_setReminder.getText().toString().trim());
+//            reminderClass.setFoodTime(btn_setDay.getSelectedItem().toString().trim());
+//            databaseClass.foodDao().insertAll(reminderClass);
+            Toast.makeText(this, "Reminder set for " + btn_setReminder.getText().toString() +
+                    " for " + btn_setDay.getSelectedItem().toString() + "before expiration", Toast.LENGTH_SHORT).show();
+
             finish();
 
         }
 
-        }
+    }
 
     private void selectTime() {
-        Calendar calendar=Calendar.getInstance();
-        int hour=calendar.get(Calendar.HOUR_OF_DAY);
-        int minute=calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog=new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                timeTonotify=i+":"+i1;
-                btn_doneReminder.setText(timeTonotify);
+            public void onTimeSet(TimePicker timePicker, int hr, int min) {
+                timeTonotify = hr + ":" + min;
+                btn_setReminder.setText(timeTonotify);
 
             }
         }, hour, minute, false);
         timePickerDialog.show();
     }
 
-    private void selectDate(){
-        Calendar calendar=Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                btn_setDay.setText(day+"/"+(month+1)+"/"+year);
-
-            }
-        }, year, month, day);
-        datePickerDialog.show();
-    }
+//    private void selectDate(){
+//        Calendar calendar=Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//        DatePickerDialog datePickerDialog=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//                btn_setDay.setText(day+"/"+(month+1)+"/"+year);
+//
+//            }
+//        }, year, month, day);
+//        datePickerDialog.show();
+//    }
 
     public String FormatTime(int hour, int minute) {
         String time;

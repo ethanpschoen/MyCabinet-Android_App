@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="options_list" >
+        <item>Select reminder time frame</item>
         <item>1 Day</item>
         <item>2 Days</item>
         <item>3 Days</item>
