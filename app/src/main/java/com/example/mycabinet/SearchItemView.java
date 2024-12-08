@@ -12,28 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ListItemView extends Fragment {
+import java.util.ArrayList;
+
+public class SearchItemView extends Fragment {
 
     private RecyclerView recyclerView;
-    private FoodSection section;
-    private ListItemAdapter adapter;
+    private ArrayList<FoodItem> items;
+    private SearchItemAdapter adapter;
 
-    public ListItemView(FoodSection section) {
-        this.section = section;
+    public SearchItemView(ArrayList<FoodItem> items) {
+        this.items = items;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_list_item_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_item_view, container, false);
 
-        if (getActivity() instanceof SectionActivity) {
-            SectionActivity activity = (SectionActivity) getActivity();
+        if (getActivity() instanceof SearchActivity) {
+            SearchActivity activity = (SearchActivity) getActivity();
 
-            recyclerView = view.findViewById(R.id.item_list);
+            recyclerView = view.findViewById(R.id.search_list);
 
-            adapter = new ListItemAdapter(activity, section);
+            adapter = new SearchItemAdapter(activity, items);
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
 

@@ -42,7 +42,7 @@ public class Kitchen {
     }
 
     public void removeSection(FoodSection section) {
-        sections.remove(section);
+        boolean removed = sections.remove(section);
     }
 
     public void clearSections() {
@@ -51,6 +51,12 @@ public class Kitchen {
 
     public ArrayList<FoodSection> getSections() {
         return sections;
+    }
+
+    public void removeItem(FoodItem item) {
+        for (FoodSection section : sections) {
+            section.removeFoodItem(item);
+        }
     }
 
     public void setSettings(Preferences settings) {

@@ -3,10 +3,7 @@ package com.example.mycabinet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +26,6 @@ public class SectionActivity extends AppCompatActivity {
     private FoodSection section;
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
-    private ToggleButton toggleButton;
 
     EditText foodName;
     ReminderAdapter reminderAdapter;
@@ -49,7 +45,7 @@ public class SectionActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.back_button_from_section).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SectionActivity.this, MainActivity.class);
@@ -92,7 +88,7 @@ public class SectionActivity extends AppCompatActivity {
             }
         }
 
-        toggleButton = findViewById(R.id.sort_item_button);
+        ToggleButton toggleButton = findViewById(R.id.sort_item_button);
         toggleButton.setChecked(true);
 
         toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
@@ -129,21 +125,11 @@ public class SectionActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showItem(int position) {
-        FoodItem item = section.getSectionItems().get(position);
-    }
-
     public void addFoodItem(View view) {
         Intent intent = new Intent(this, AddItemActivity.class);
 
         intent.putExtra("FROM_SECTION", section.getSectionName());
 
         startActivity(intent);
-    }
-
-    public void printItems(ArrayList<FoodItem> items) {
-        for (FoodItem item : items) {
-            Log.d("SectionActivity", item.getItemName());
-        }
     }
 }

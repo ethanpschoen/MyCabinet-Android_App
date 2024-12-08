@@ -73,8 +73,10 @@ public class FoodSection implements Parcelable {
     }
 
     public void removeFoodItem(FoodItem item) {
-        sectionItems.remove(item);
-        sectionSize--;
+        boolean removed = sectionItems.remove(item);
+        if (removed) {
+            sectionSize--;
+        }
     }
 
     public void clearFoodItems() {

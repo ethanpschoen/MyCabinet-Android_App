@@ -4,7 +4,9 @@
         <item name="colorPrimary">@color/ashgray</item>
         <item name="colorPrimaryDark">@color/feldgrau</item>
         <item name="colorAccent">@color/timberwolf</item>
+        <item name="searchViewStyle">@style/CustomSearchViewStyle</item>
     </style>
 
     <style name="Theme.MyCabinet" parent="Base.Theme.MyCabinet" />
+
 </resources>
