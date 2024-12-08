@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".Preferences">
 
@@ -35,28 +36,55 @@
         android:id="@+id/btn_setDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lightgreen"
-        android:text="Set your reminder day"
-        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="25dp"
-        android:textColor="@color/black"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/lightgreen"
+        android:text="Remind me _ days in advance"
+        android:textColor="@color/black" />
+
     <Button
         android:id="@+id/btn_doneReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:textColor="@color/white"
-        android:text="DONE"
-        android:background="@color/feldgrau"/>
-    <Button
-        android:id="@+id/sectionSettingsActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/white"
-        android:text="Back to Settings"
-        android:background="@color/feldgrau"/>
+        android:background="@color/feldgrau"
+        android:text="Remind Me!"
+        android:textColor="@color/white" />
 
-</LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeWidthFocused="0sp"
+        app:boxStrokeWidth="0sp"
+        android:hint="Select"
+        android:id="@+id/inputLayout"
+        android:layout_marginStart="25sp"
+        android:layout_marginEnd="25sp"
+        android:layout_centerInParent="true"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        app:boxCornerRadiusTopStart="10sp"
+        app:boxCornerRadiusTopEnd="10sp"
+        app:boxCornerRadiusBottomStart="10sp"
+        app:boxCornerRadiusBottomEnd="10sp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/inputTV"
+            android:inputType="none"
+            app:simpleItems="@array/options_list" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/inputLayout"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="20sp"
+    android:id="@+id/btn"
+    android:text="Show toast"/>
+
+
+    </LinearLayout>
