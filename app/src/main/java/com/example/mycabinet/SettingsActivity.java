@@ -1,7 +1,10 @@
 package com.example.mycabinet;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,18 +22,26 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.mycabinet.Database.DatabaseClass;
 import com.example.mycabinet.Database.ReminderClass;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     Button settingsActivity, btn_setReminder, btn_doneReminder;
     Spinner btn_setDay;
     String timeTonotify;
     DatabaseClass databaseClass;
 
+    Kitchen kitchen;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifs_preferences);
+
+        kitchen = Kitchen.getInstance();
 
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
 //        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
@@ -78,6 +89,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     String toSection = intent.getStringExtra("FROM_SECTION");
                     outIntent.putExtra("SECTION_TO_VIEW", toSection);
 
+                    setResult(RESULT_OK);
+
+                    updateReminders();
+
                     startActivity(outIntent);
 
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -87,11 +102,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     String query = intent.getStringExtra("QUERY_FROM_SEARCH");
                     outIntent.putExtra("QUERY", query);
 
+                    setResult(RESULT_OK);
+
+                    updateReminders();
+
                     startActivity(outIntent);
 
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 } else {
                     Intent outIntent = new Intent(SettingsActivity.this, MainActivity.class);
+
+                    updateReminders();
 
                     startActivity(outIntent);
 
@@ -125,13 +146,25 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 btn_setDay.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a date and time for your food item", Toast.LENGTH_SHORT).show();
     } else {
-//            ReminderClass reminderClass=new ReminderClass();
-//            reminderClass.setFoodName(btn_setReminder.getText().toString().trim());
-//            reminderClass.setFoodDate(btn_setReminder.getText().toString().trim());
-//            reminderClass.setFoodTime(btn_setDay.getSelectedItem().toString().trim());
-//            databaseClass.foodDao().insertAll(reminderClass);
+            Kitchen kitchen = Kitchen.getInstance();
+
+            int daysBefore = Integer.parseInt(btn_setDay.getSelectedItem().toString().substring(0, 1));
+            kitchen.getSettings().setDaysBeforeReminder(daysBefore);
+
+            int hour = Integer.parseInt(timeTonotify.substring(0, 2));
+            int minute = Integer.parseInt(timeTonotify.substring(3,5));
+
+            Calendar timeOfDay = Calendar.getInstance();
+            timeOfDay.set(Calendar.HOUR_OF_DAY, hour);
+            timeOfDay.set(Calendar.MINUTE, minute);
+            timeOfDay.set(Calendar.SECOND, 0);
+
+            kitchen.getSettings().setTimeOfDayOfReminder(timeOfDay);
+
+            updateReminders();
+
             Toast.makeText(this, "Reminder set for " + btn_setReminder.getText().toString() +
-                    " for " + btn_setDay.getSelectedItem().toString() + "before expiration", Toast.LENGTH_SHORT).show();
+                    " for " + btn_setDay.getSelectedItem().toString() + " before expiration", Toast.LENGTH_SHORT).show();
 
             finish();
 
@@ -146,7 +179,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hr, int min) {
-                timeTonotify = hr + ":" + min;
+                if (min < 10) {
+                    timeTonotify = hr + ":0" + min;
+                } else {
+                    timeTonotify = hr + ":" + min;
+                }
                 btn_setReminder.setText(timeTonotify);
 
             }
@@ -215,4 +252,52 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 //            // update Preferences class
 //        }
 //    }
+
+    private void updateReminders() {
+        cancelAllReminders();  // Cancel existing reminders
+
+        // Get the updated reminder time and calculate the correct reminder times for each item
+        for (FoodItem item : kitchen.getItems()) {
+            LocalDate expirationDate = item.getExpirationDate();
+            int reminderDaysBefore = kitchen.getSettings().getDaysBeforeReminder();
+            LocalDate reminderDate = expirationDate.minusDays(reminderDaysBefore);  // Adjust by the reminderDaysBefore
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(Date.from(reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            // Set reminder time using the new settings (e.g., the time of day the user has set)
+            calendar.set(Calendar.HOUR_OF_DAY, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.MINUTE));
+            calendar.set(Calendar.SECOND, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.SECOND));
+
+            long reminderTimeInMillis = calendar.getTimeInMillis();
+
+            scheduleReminder(reminderTimeInMillis, item);  // Schedule the reminder
+        }
+    }
+
+    // Method to schedule a reminder
+    private void scheduleReminder(long timeInMillis, FoodItem item) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, ReminderBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, item.getItemID().hashCode(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+        }
+    }
+
+    // Method to cancel all reminders
+    private void cancelAllReminders() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        for (FoodItem item : kitchen.getItems()) {
+            Intent intent = new Intent(this, ReminderBroadcastReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, item.getItemID().hashCode(), intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            if (alarmManager != null) {
+                alarmManager.cancel(pendingIntent);
+            }
+        }
+    }
 }

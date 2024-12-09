@@ -108,6 +108,7 @@ public class SearchActivity extends AppCompatActivity {
         loadFragment(new SearchItemView(items));
     }
 
+
     // Helper method to load a fragment
     private boolean loadFragment(Fragment fragment) {
         // If the fragment is not null, load it

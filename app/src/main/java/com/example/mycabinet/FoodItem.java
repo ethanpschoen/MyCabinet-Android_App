@@ -1,6 +1,7 @@
 package com.example.mycabinet;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /*
 The FoodItem model class represents an food product in the Kitchen.
@@ -20,12 +21,15 @@ public class FoodItem {
     private String itemName;
     private LocalDate expirationDate;
     private String itemNotes;
+    private String itemID;
 
 
     // Constructor to initialize the object
     public FoodItem(String itemName, LocalDate expirationDate) {
         this.itemName = itemName;
         this.expirationDate = expirationDate;
+        this.itemNotes = "";
+        this.itemID = UUID.randomUUID().toString();
     }
 
     // Constructor with additional notes
@@ -60,5 +64,9 @@ public class FoodItem {
 
     public void setItemNotes(String itemNotes) {
         this.itemNotes = itemNotes;
+    }
+
+    public String getItemID() {
+        return itemID;
     }
 }

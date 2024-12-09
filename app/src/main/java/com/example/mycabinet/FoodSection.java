@@ -27,6 +27,7 @@ public class FoodSection {
     private ImageView sectionIcon;
     private int sectionSize;
 
+    private ReminderListener reminderListener;
 
     // Constructor to initialize the object
     public FoodSection(String sectionName) {
@@ -80,23 +81,39 @@ public class FoodSection {
         this.sectionSize = sectionSize;
     }
 
+    public void setReminderListener(ReminderListener listener) {
+        this.reminderListener = listener;
+    }
 
     // Methods to add and remove items from the section
 
     public void addFoodItem(FoodItem item) {
         sectionItems.add(item);
         sectionSize++;
+        if (reminderListener != null) {
+            reminderListener.onFoodItemAdded(item);
+        }
     }
 
-    public void removeFoodItem(FoodItem item) {
+    public boolean removeFoodItem(FoodItem item) {
         boolean removed = sectionItems.remove(item);
         if (removed) {
             sectionSize--;
+            if (reminderListener != null) {
+                reminderListener.onFoodItemRemoved(item);
+            }
         }
+        return removed;
     }
 
     public void clearFoodItems() {
         sectionItems.clear();
         sectionSize = 0;
+    }
+
+    public void onSettingsChanged() {
+        if (reminderListener != null) {
+            reminderListener.onSettingsChanged();
+        }
     }
 }

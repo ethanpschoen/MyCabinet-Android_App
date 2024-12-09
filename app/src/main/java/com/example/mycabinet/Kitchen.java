@@ -22,6 +22,8 @@ public class Kitchen {
     private ArrayList<FoodSection> sections;
     private Preferences settings;
 
+    private ReminderListener reminderListener;
+
 
     // Constructor to initialize the object
     private Kitchen() {
@@ -71,11 +73,34 @@ public class Kitchen {
 
     // Method to remove a FoodItem object from the kitchen
     public void removeItem(FoodItem item) {
+        boolean removed = false;
+
         // Iterate through each section
         for (FoodSection section : sections) {
             // (Try to) delete the FoodItem object from the section
-            section.removeFoodItem(item);
+            removed = section.removeFoodItem(item);
+            if (removed) {
+                if (reminderListener != null) {
+                    reminderListener.onFoodItemRemoved(item);
+                    break;
+                }
+            }
         }
+    }
+
+    public void onSettingsChanged() {
+        if (reminderListener != null) {
+            reminderListener.onSettingsChanged();
+        }
+    }
+
+
+    public ArrayList<FoodItem> getItems() {
+        ArrayList<FoodItem> items = new ArrayList<>();
+        for (FoodSection section : sections) {
+            items.addAll(section.getSectionItems());
+        }
+        return items;
     }
 
     // Getters and setters
@@ -91,6 +116,10 @@ public class Kitchen {
 
     public Preferences getSettings() {
         return settings;
+    }
+
+    public void setReminderListener(ReminderListener listener) {
+        this.reminderListener = listener;
     }
 
 
@@ -124,7 +153,7 @@ public class Kitchen {
                 // If the food name is not empty, create a FoodItem object and add it to the section
                 if (!foodName.isEmpty()) {
                     // Generate a future date for the FoodItem
-                    LocalDate futureDate = generateFutureDate(i);
+                    LocalDate futureDate = generateFutureDate(i + 10);
                     section.addFoodItem(new FoodItem(foodName, futureDate));
                 }
             }

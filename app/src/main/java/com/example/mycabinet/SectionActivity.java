@@ -81,6 +81,7 @@ public class SectionActivity extends AppCompatActivity {
                 Intent intent = new Intent(SectionActivity.this, SettingsActivity.class);
                 // Put the section name in the intent for navigating back to it
                 intent.putExtra("FROM_SECTION", section.getSectionName());
+
                 startActivity(intent);
             }
         });
@@ -149,6 +150,7 @@ public class SectionActivity extends AppCompatActivity {
         // Load the fragment
         loadFragment(new ListItemView(section));
     }
+
 
     // Helper method to load a fragment
     private boolean loadFragment(Fragment fragment) {
