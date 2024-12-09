@@ -23,6 +23,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+    /*
+    Member variables
+
+    btn_setReminder: button to set the reminder time
+    btn_doneReminder: button to confirm the reminder time
+    btn_setDay: spinner to select the day before expiration date to send a reminder
+    timeTonotify: the time to notify the user to take the food item
+    kitchen: a singleton instance of the Kitchen class, containing all of the data used in the app
+     */
+
     Button btn_setReminder, btn_doneReminder;
     Spinner btn_setDay;
     String timeTonotify;
@@ -50,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         btn_setDay.setAdapter(adapter);
-
+        //checks for what the chef selects from the spinner for the day before expiration
         btn_setDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -69,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
+    //this is the back button to go back to the previous activity
         findViewById(R.id.back_button_from_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

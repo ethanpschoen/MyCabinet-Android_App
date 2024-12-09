@@ -37,6 +37,7 @@ public class FoodItem {
         this.itemName = itemName;
         this.expirationDate = expirationDate;
         this.itemNotes = itemNotes;
+        this.itemID = UUID.randomUUID().toString();
     }
 
 
