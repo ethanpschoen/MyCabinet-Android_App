@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     setResult(RESULT_OK);
 
-                    updateReminders();
+                    updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
@@ -96,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     setResult(RESULT_OK);
 
-                    updateReminders();
+                    updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
@@ -104,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     Intent outIntent = new Intent(SettingsActivity.this, MainActivity.class);
 
-                    updateReminders();
+                    updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
@@ -146,13 +146,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             kitchen.getSettings().setTimeOfDayOfReminder(timeOfDay);
 
-            updateReminders();
+            updateReminders(SettingsActivity.this);
 
             Toast.makeText(this, "Reminder set for " + btn_setReminder.getText().toString() +
-                    " for " + btn_setDay.getSelectedItem().toString() + " before expiration", Toast.LENGTH_SHORT).show();
+                    " for " + btn_setDay.getSelectedItem().toString().toLowerCase() + " before expiration", Toast.LENGTH_SHORT).show();
 
             finish();
-
         }
 
     }
@@ -177,51 +176,79 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void updateReminders() {
-        cancelAllReminders();  // Cancel existing reminders
+    // Method to schedule a reminder for a FoodItem
+    public void scheduleReminder(Context context, FoodItem item) {
+        // Get the expiration date
+        LocalDate expirationDate = item.getExpirationDate();
 
-        // Get the updated reminder time and calculate the correct reminder times for each item
-        for (FoodItem item : kitchen.getItems()) {
-            LocalDate expirationDate = item.getExpirationDate();
-            int reminderDaysBefore = kitchen.getSettings().getDaysBeforeReminder();
-            LocalDate reminderDate = expirationDate.minusDays(reminderDaysBefore);  // Adjust by the reminderDaysBefore
+        // Calculate the reminder date based on expiration date
+        int remindDaysBefore = kitchen.getSettings().getDaysBeforeReminder();
+        LocalDate reminderDate = expirationDate.minusDays(remindDaysBefore);
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(Date.from(reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        // Create Calendar date
+        Calendar calendar = Calendar.getInstance();
+        // Set the calendar to the reminder date
+        calendar.setTime(Date.from(reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        // Set the time of the reminder
+        calendar.set(Calendar.HOUR_OF_DAY, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.SECOND));
 
-            // Set reminder time using the new settings (e.g., the time of day the user has set)
-            calendar.set(Calendar.HOUR_OF_DAY, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.MINUTE));
-            calendar.set(Calendar.SECOND, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.SECOND));
+        // Get the time in milliseconds
+        long reminderTime = calendar.getTimeInMillis();
 
-            long reminderTimeInMillis = calendar.getTimeInMillis();
 
-            scheduleReminder(reminderTimeInMillis, item);  // Schedule the reminder
+        // Get manager and intent for the reminder
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, ReminderBroadcastReceiver.class);
+
+        // Put item name and expiration date in intent
+        intent.putExtra("ITEM_NAME", item.getItemName());
+        intent.putExtra("EXPIRATION_DATE", item.getExpirationDate().toString());
+
+        // Set pending intent
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Set the reminder
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
         }
     }
 
-    // Method to schedule a reminder
-    private void scheduleReminder(long timeInMillis, FoodItem item) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, ReminderBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, item.getItemID().hashCode(), intent,
+    // Method to cancel a reminder for a FoodItem
+    public void cancelReminder(Context context, FoodItem item) {
+        // Get manager and intent for the reminder
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, ReminderBroadcastReceiver.class);
+
+        // Set pending intent using unique ID for the item
+        int requestCode = item.getItemID().hashCode();
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+        // Cancel the reminder
+        if (alarmManager != null && pendingIntent != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
+    private void updateReminders(Context context) {
+        cancelAllReminders(context);  // Cancel existing reminders
+
+        // Get the updated reminder time and calculate the correct reminder times for each item
+        for (FoodItem item : kitchen.getItems()) {
+            scheduleReminder(context, item);  // Schedule the reminder
         }
     }
 
     // Method to cancel all reminders
-    private void cancelAllReminders() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    private void cancelAllReminders(Context context) {
         for (FoodItem item : kitchen.getItems()) {
-            Intent intent = new Intent(this, ReminderBroadcastReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, item.getItemID().hashCode(), intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-            if (alarmManager != null) {
-                alarmManager.cancel(pendingIntent);
-            }
+            cancelReminder(context, item);
         }
     }
 }
