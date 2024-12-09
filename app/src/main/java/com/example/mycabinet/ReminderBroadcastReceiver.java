@@ -11,17 +11,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+/*
+The ReminderBroadcastReceiver class
+ */
+
 public class ReminderBroadcastReceiver extends BroadcastReceiver {
 
+    // Override the onReceive method to handle the broadcast intent
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Check for notification permission
             if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(context, "Notification permission not granted", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
+        //
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "reminder_channel")
                 .setSmallIcon(R.drawable.app_logo)
                 .setContentTitle("Reminder")

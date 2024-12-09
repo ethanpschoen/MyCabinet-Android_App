@@ -88,7 +88,7 @@ public class ListSectionAdapter extends RecyclerView.Adapter<ListSectionAdapter.
                     FoodSection clickedSection = mSectionList.get(currentPosition);
 
                     // Remove from list and notify adapter
-                    mSectionList.remove(section);
+                    mSectionList.remove(currentPosition);
                     notifyItemRemoved(currentPosition);
                     notifyItemRangeChanged(currentPosition, mSectionList.size());
 

@@ -17,6 +17,7 @@ public class FoodItem {
     itemName: String representing the name of the food item
     expirationDate: LocalDate representing the expiration date of the food item
     itemNotes: String representing any additional (optional) notes about the food item
+    itemID: String representing the unique ID of the food item
      */
     private String itemName;
     private LocalDate expirationDate;
@@ -37,6 +38,7 @@ public class FoodItem {
         this.itemName = itemName;
         this.expirationDate = expirationDate;
         this.itemNotes = itemNotes;
+        this.itemID = UUID.randomUUID().toString();
     }
 
 

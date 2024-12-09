@@ -1,5 +1,6 @@
 package com.example.mycabinet;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class FoodSection {
     sectionColor: String representing the color of the section (not implemented yet)
     sectionIcon: ImageView representing the icon of the section (not implemented yet)
     sectionSize: int representing the number of items in the section
+
+    reminderListener: ReminderListener object representing the listener for the section for updating notifications
      */
     private String sectionName;
     private ArrayList<FoodItem> sectionItems;
@@ -96,8 +99,19 @@ public class FoodSection {
     }
 
     public boolean removeFoodItem(FoodItem item) {
-        boolean removed = sectionItems.remove(item);
+        boolean removed = false;
+
+        for (FoodItem sectionItem : sectionItems) {
+            Log.d("FoodSection", "Checking item: " + sectionItem.getItemName() + " with size: " + sectionSize);
+            if (sectionItem.equals(item)) {
+                sectionItems.remove(sectionItem);
+                Log.d("FoodSection", "Found item: " + item.getItemName() + " with size: " + sectionSize);
+                removed = true;
+                break;
+            }
+        }
         if (removed) {
+            Log.d("FoodSection", "Found and removed item: " + item.getItemName() + " with size: " + sectionSize);
             sectionSize--;
             if (reminderListener != null) {
                 reminderListener.onFoodItemRemoved(item);
