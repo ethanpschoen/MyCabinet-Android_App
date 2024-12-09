@@ -124,6 +124,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+    //chekcs for which button is clicked and calls the appropriate method
     @Override
     public void onClick(View v) {
         if (v == btn_setReminder){
@@ -135,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             submit();
         }
     }
-
+    //checks for what the chef selects from the spinner for the day before expiration
     private void submit(){
         if (btn_setReminder.getText().toString().equals("Set your reminder time") ||
                 btn_setDay.getSelectedItemPosition() == 0) {
@@ -166,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
     }
-
+    //checks for what time the chef selects for the reminder
     private void selectTime() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -186,7 +187,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         timePickerDialog.show();
     }
 
-
+// Method to update the reminders
     private void updateReminders() {
         cancelAllReminders();  // Cancel existing reminders
 
