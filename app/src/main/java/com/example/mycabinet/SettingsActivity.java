@@ -22,7 +22,21 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+/*
+
+ */
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+
+    /*
+    Member variables
+    btn_setReminder: button to set the reminder time
+    btn_doneReminder: button to confirm the reminder time
+    btn_setDay: spinner to select the day before expiration date to send a reminder
+    timeTonotify: the time to notify the user to take the food item
+    kitchen: a singleton instance of the Kitchen class, containing all of the data used in the app
+     */
+
     Button btn_setReminder, btn_doneReminder;
     Spinner btn_setDay;
     String timeTonotify;
@@ -51,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         btn_setDay.setAdapter(adapter);
 
+        // Checks for what the Chef selects from the Spinner for the day before expiration
         btn_setDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -70,6 +85,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
+        // This is the back button to go back to the previous activity
         findViewById(R.id.back_button_from_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +130,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+
+    // Checks for which Button is clicked and calls the appropriate method
     @Override
     public void onClick(View v) {
         if (v == btn_setReminder){
@@ -126,6 +144,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    // Checks for what the Chef selects from the Spinner for the day before expiration
     private void submit(){
         if (btn_setReminder.getText().toString().equals("Set your reminder time") ||
                 btn_setDay.getSelectedItemPosition() == 0) {
@@ -156,6 +175,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    // Checks for what time the chef selects for the reminder
     private void selectTime() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -236,6 +256,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    // Method to update the reminders
     private void updateReminders(Context context) {
         cancelAllReminders(context);  // Cancel existing reminders
 
