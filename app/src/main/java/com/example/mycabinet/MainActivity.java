@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -28,18 +27,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mycabinet.Database.DatabaseClass;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 /*
 The MainActivity is the core Activity of the app.
@@ -61,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
 
     private RecyclerView recyclerView;
     private ListSectionAdapter adapter;
-
-    EditText foodName;
-    ReminderAdapter reminderAdapter;
-    DatabaseClass DatabaseClass;
 
 
     @Override
@@ -160,12 +149,6 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
 
         // Load the fragment
         loadFragment(new ListSectionView(kitchen));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        setAdapter();
     }
 
     @Override

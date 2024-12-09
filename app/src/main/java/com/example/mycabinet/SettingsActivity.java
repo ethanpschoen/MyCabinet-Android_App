@@ -1,7 +1,6 @@
 package com.example.mycabinet;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,19 +17,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.mycabinet.Database.DatabaseClass;
-import com.example.mycabinet.Database.ReminderClass;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
-    Button settingsActivity, btn_setReminder, btn_doneReminder;
+    Button btn_setReminder, btn_doneReminder;
     Spinner btn_setDay;
     String timeTonotify;
-    DatabaseClass databaseClass;
 
     Kitchen kitchen;
 
@@ -44,13 +38,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         kitchen = Kitchen.getInstance();
 
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
-//        settingsActivity = (Button) findViewById(R.id.sectionSettingsActivity);
         btn_doneReminder = (Button) findViewById(R.id.btn_doneReminder);
 
         btn_setDay = (Spinner) findViewById(R.id.day_select_menu);
 
         btn_setReminder.setOnClickListener(this);
-//        btn_time.setOnClickListener(this);
         btn_doneReminder.setOnClickListener(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.options_list, android.R.layout.simple_spinner_item);
@@ -128,13 +120,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             selectTime();
 
         }
-//        else if (v == btn_setDay){
-//            selectDate();
-//
-//        }
-//        else if (v == btn_time){
-//            selectTime();
-//        }
 
         else if (v == btn_doneReminder){
             submit();
@@ -145,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (btn_setReminder.getText().toString().equals("Set your reminder time") ||
                 btn_setDay.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a date and time for your food item", Toast.LENGTH_SHORT).show();
-    } else {
+        } else {
             Kitchen kitchen = Kitchen.getInstance();
 
             int daysBefore = Integer.parseInt(btn_setDay.getSelectedItem().toString().substring(0, 1));
@@ -191,67 +176,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         timePickerDialog.show();
     }
 
-//    private void selectDate(){
-//        Calendar calendar=Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        DatePickerDialog datePickerDialog=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                btn_setDay.setText(day+"/"+(month+1)+"/"+year);
-//
-//            }
-//        }, year, month, day);
-//        datePickerDialog.show();
-//    }
-
-    public String FormatTime(int hour, int minute) {
-        String time;
-        time = "";
-        String formattedMinute;
-
-        if (minute / 10 == 0){
-            formattedMinute = "0" + minute;
-        } else {
-            formattedMinute = "" + minute;
-
-        }
-
-        if (hour == 0){
-            time = "12" + ":" + formattedMinute + " AM";}
-        else if (hour < 12){
-            time = hour + ":" + formattedMinute + " AM";
-        } else if (hour == 12){
-            time = "12" + ":" + formattedMinute + " PM";
-        }
-        return time;
-    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//
-//    }
-
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        if (key.equals("notification_type_1")) {
-//            // update Preferences class
-//        } else if (key.equals("notification_type_2")) {
-//            // update Preferences class
-//        } else if (key.equals("light_theme")) {
-//            // update Preferences class
-//        } else if (key.equals("reminder_days")) {
-//            // update Preferences class
-//        }
-//    }
 
     private void updateReminders() {
         cancelAllReminders();  // Cancel existing reminders

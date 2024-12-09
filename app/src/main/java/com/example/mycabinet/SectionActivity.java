@@ -2,7 +2,6 @@ package com.example.mycabinet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -36,13 +35,6 @@ public class SectionActivity extends AppCompatActivity {
     section: FoodSection representing the section of the kitchen
      */
     private FoodSection section;
-
-    private RecyclerView recyclerView;
-    private ListSectionAdapter adapter;
-
-    EditText foodName;
-
-
 
 
     @Override
