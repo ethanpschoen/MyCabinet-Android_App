@@ -23,7 +23,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 /*
-
+The SettingsActivity is responsible for handling the individual preferences of the Chef.
+Here, the Chef can select a reminder time and day before expiration.
+They can also cancel the update by selecting the back button.
  */
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,10 +49,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set up the activity layout
         setContentView(R.layout.notifs_preferences);
 
+        // Get the singleton instance of the Kitchen class
         kitchen = Kitchen.getInstance();
 
+        // Initialize the member variables
         btn_setReminder = (Button) findViewById(R.id.btn_setReminder);
         btn_doneReminder = (Button) findViewById(R.id.btn_doneReminder);
 
@@ -59,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         btn_setReminder.setOnClickListener(this);
         btn_doneReminder.setOnClickListener(this);
 
+        // Set up the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.options_list, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,10 +80,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                // Default to first option
                 String selectedDay = adapterView.getItemAtPosition(0).toString();
             }
         });
 
+        // Set up the toolbar
         Toolbar toolbar = findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
 
@@ -94,36 +102,40 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (intent.getStringExtra("FROM_SECTION") != null) {
                     Intent outIntent = new Intent(SettingsActivity.this, SectionActivity.class);
 
+                    // Get the name of the section to view
                     String toSection = intent.getStringExtra("FROM_SECTION");
                     outIntent.putExtra("SECTION_TO_VIEW", toSection);
 
-                    setResult(RESULT_OK);
-
+                    // Update reminders with (new) settings
                     updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
+                    // Transition animation
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 } else if (intent.getStringExtra("QUERY_FROM_SEARCH") != null) {
                     Intent outIntent = new Intent(SettingsActivity.this, SearchActivity.class);
 
+                    // Get the query to search for
                     String query = intent.getStringExtra("QUERY_FROM_SEARCH");
                     outIntent.putExtra("QUERY", query);
 
-                    setResult(RESULT_OK);
-
+                    // Update reminders with (new) settings
                     updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
+                    // Transition animation
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 } else {
                     Intent outIntent = new Intent(SettingsActivity.this, MainActivity.class);
 
+                    // Update reminders with (new) settings
                     updateReminders(SettingsActivity.this);
 
                     startActivity(outIntent);
 
+                    // Transition animation
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 }
             }
@@ -146,15 +158,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     // Checks for what the Chef selects from the Spinner for the day before expiration
     private void submit(){
+        // Ensure Chef selects a time and a day before expiration
         if (btn_setReminder.getText().toString().equals("Set your reminder time") ||
                 btn_setDay.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a date and time for your food item", Toast.LENGTH_SHORT).show();
         } else {
+            // Update the settings with the new reminder time and day before expiration
             Kitchen kitchen = Kitchen.getInstance();
 
             int daysBefore = Integer.parseInt(btn_setDay.getSelectedItem().toString().substring(0, 1));
             kitchen.getSettings().setDaysBeforeReminder(daysBefore);
 
+            // Convert the time to a Calendar object
             int hour = Integer.parseInt(timeTonotify.substring(0, 2));
             int minute = Integer.parseInt(timeTonotify.substring(3,5));
 
@@ -163,8 +178,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             timeOfDay.set(Calendar.MINUTE, minute);
             timeOfDay.set(Calendar.SECOND, 0);
 
+            // Update the settings with the new reminder time
             kitchen.getSettings().setTimeOfDayOfReminder(timeOfDay);
 
+            // Update reminders with (new) settings
             updateReminders(SettingsActivity.this);
 
             Toast.makeText(this, "Reminder set for " + btn_setReminder.getText().toString() +
@@ -175,11 +192,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    // Checks for what time the chef selects for the reminder
+    // Checks for what time the Chef selects for the reminder
     private void selectTime() {
+        // Get Calendar instance
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
+
+        // Create TimePickerDialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hr, int min) {
