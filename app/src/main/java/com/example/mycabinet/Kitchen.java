@@ -18,6 +18,8 @@ public class Kitchen {
 
     sections: ArrayList of FoodSection objects representing the kitchen sections
     settings: Preferences object representing the user's settings
+
+    reminderListener: ReminderListener object representing the listener for the kitchen for updating notifications
      */
     private ArrayList<FoodSection> sections;
     private Preferences settings;
@@ -153,7 +155,7 @@ public class Kitchen {
                 // If the food name is not empty, create a FoodItem object and add it to the section
                 if (!foodName.isEmpty()) {
                     // Generate a future date for the FoodItem
-                    LocalDate futureDate = generateFutureDate(i + 10);
+                    LocalDate futureDate = generateFutureDate(i + 5);
                     section.addFoodItem(new FoodItem(foodName, futureDate));
                 }
             }

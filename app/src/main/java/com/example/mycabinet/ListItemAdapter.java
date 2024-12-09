@@ -70,7 +70,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListIt
                     FoodItem clickedItem = mItemList.get(currentPosition);
 
                     // Remove the item from the list and notify the adapter
-                    mItemList.remove(clickedItem);
                     notifyItemRemoved(currentPosition);
                     notifyItemRangeChanged(currentPosition, mItemList.size());
 

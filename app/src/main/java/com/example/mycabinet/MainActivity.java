@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
      */
     private Kitchen kitchen = Kitchen.getInstance();
 
-    private RecyclerView recyclerView;
-    private ListSectionAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
         // Set up the activity layout
         setContentView(R.layout.activity_main);
 
+        // Set up the ReminderListener for the Kitchen
         kitchen.setReminderListener(this);
 
         // Receive intent from AddSectionActivity, which has the name of the new section to be added
@@ -109,32 +107,41 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
         SectionSort sorter = new SectionSort(kitchen.getSections());
         sorter.sortByName();
 
+
+        // Create notification channel for reminders
         createNotificationChannel();
 
+        // Check if exact alarm notifications are allowed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             if (!alarmManager.canScheduleExactAlarms()) {
+                // Redirect Chef to device settings to enable exact alarm scheduling
                 Intent settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                 startActivity(settingsIntent);
             }
         }
 
+        // Check if notifications are allowed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Request permission to send notifications
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
                         1);  // Request code can be any integer
             }
         }
 
+        // Check if notifications are allowed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Show a dialog to the Chef to enable notifications
                 new AlertDialog.Builder(this)
                         .setTitle("Permission Required")
                         .setMessage("To receive reminders, please enable notifications in settings.")
                         .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // Redirect to device settings
                                 Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                                 intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
                                 startActivity(intent);
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
             }
         }
 
+        // Set up reminders for all items
         setReminders(this, kitchen.getItems());
 
         // Load the fragment
@@ -237,12 +245,16 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
         startActivity(intent);
     }
 
+
+    // Method to create a notification channel
     public void createNotificationChannel() {
+        // If Android version is Oreo or higher, create a notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "reminder_channel";
             CharSequence name = "Reminder Notifications";
             String description = "Channel for reminder notifications";
             int importance = NotificationManager.IMPORTANCE_HIGH;
+            // Create the notification channel
             NotificationChannel channel = new NotificationChannel(channelId, name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -250,45 +262,79 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
         }
     }
 
-    public void scheduleReminder(Context context, long timeInMillis) {
+    // Method to schedule a reminder for a FoodItem
+    public void scheduleReminder(Context context, FoodItem item) {
+        // Get the expiration date
+        LocalDate expirationDate = item.getExpirationDate();
+
+        // Calculate the reminder date based on expiration date
+        int remindDaysBefore = kitchen.getSettings().getDaysBeforeReminder();
+        LocalDate reminderDate = expirationDate.minusDays(remindDaysBefore);
+
+        // Create Calendar date
+        Calendar calendar = Calendar.getInstance();
+        // Set the calendar to the reminder date
+        calendar.setTime(Date.from(reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        // Set the time of the reminder
+        calendar.set(Calendar.HOUR_OF_DAY, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.SECOND));
+
+        // Get the time in milliseconds
+        long reminderTime = calendar.getTimeInMillis();
+
+
+        // Get manager and intent for the reminder
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         Intent intent = new Intent(context, ReminderBroadcastReceiver.class);
+
+        // Put item name and expiration date in intent
+        intent.putExtra("ITEM_NAME", item.getItemName());
+        intent.putExtra("EXPIRATION_DATE", item.getExpirationDate().toString());
+
+        // Set pending intent
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // Set the reminder
         if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
         }
     }
 
+    // Method to cancel a reminder for a FoodItem
     public void cancelReminder(Context context, FoodItem item) {
+        // Get manager and intent for the reminder
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, ReminderBroadcastReceiver.class);
 
+        // Set pending intent using unique ID for the item
         int requestCode = item.getItemID().hashCode();
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // Cancel the reminder
         if (alarmManager != null && pendingIntent != null) {
             alarmManager.cancel(pendingIntent);
-            Log.d("Reminder", "Reminder canceled");
         }
     }
 
+    // Method to cancel all reminders
     public void cancelAllReminders(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         for (FoodItem item : kitchen.getItems()) {
             cancelReminder(context, item);
         }
     }
 
+    // Method to handle permission requests (used for notifications)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        // Check if permission was granted
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, proceed with your notification code
@@ -300,37 +346,22 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
         }
     }
 
+    // Method to set reminders for all items
     public void setReminders(Context context, ArrayList<FoodItem> items) {
         // Clear all existing reminders
         cancelAllReminders(context);
 
+        // Set reminders for each item
         for (FoodItem item : items) {
-            LocalDate expirationDate = item.getExpirationDate();
-            Log.d("Reminder", "Food item: " + item.getItemName() + ", Expiration date: " + expirationDate.toString());
-            int remindDaysBefore = kitchen.getSettings().getDaysBeforeReminder();
-            LocalDate reminderDate = expirationDate.minusDays(remindDaysBefore);
-            Log.d("Reminder", "Reminder date: " + reminderDate.toString());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(Date.from(reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            calendar.set(Calendar.HOUR_OF_DAY, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.MINUTE));
-            calendar.set(Calendar.SECOND, kitchen.getSettings().getTimeOfDayOfReminder().get(Calendar.SECOND));
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = dateFormat.format(calendar.getTime());
-            Log.d("Reminder", "Formatted date: " + formattedDate);
-
-            long reminderTime = calendar.getTimeInMillis();
-
-            scheduleReminder(this, reminderTime);
+            // Schedule the reminder
+            scheduleReminder(this, item);
         }
     }
 
+    // ReminderListener methods
     @Override
     public void onFoodItemAdded(FoodItem item) {
-        long reminderTime = calculateReminderTime(item);
-        scheduleReminder(this, reminderTime);
+        scheduleReminder(this, item);
     }
 
     @Override
@@ -340,17 +371,6 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
 
     @Override
     public void onSettingsChanged() {
-        cancelAllReminders(this);
-        for (FoodItem item : kitchen.getItems()) {
-            long reminderTime = calculateReminderTime(item);
-            scheduleReminder(this, reminderTime);
-        }
-    }
-
-    private long calculateReminderTime(FoodItem item) {
-        LocalDate expirationDate = item.getExpirationDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        return calendar.getTimeInMillis();
+        setReminders(this, kitchen.getItems());
     }
 }

@@ -3,37 +3,48 @@ package com.example.mycabinet;
 import java.util.Calendar;
 import java.util.HashMap;
 
+/*
+The Preferences model class represents the user's preferences in the application.
+The Preferences object holds all settings for the Chef, including notifications, theme, and reminder settings.
+ */
 
 public class Preferences {
 
     /*
     Member variables
 
-    daysBeforeReminder: The number of days before an item's expiration date to send a reminder
-    timeOfDayOfReminder: The time of day to send a reminder (in 24-hour format; military time)
-    lightTheme: Whether or not to use the light theme, this is the default and there is no alternative was not utilized
-    notifications: a hashmap that stores app notifications
+    notifications: HashMap of notifications for each section
+    lightTheme: boolean for if the theme is light or dark
+    daysBeforeReminder: int for how many days before the expiration date the reminder should be sent
+    timeOfDayOfReminder: Calendar object for when the reminder should be sent
      */
     HashMap<String, Boolean> notifications;
     Boolean lightTheme;
     int daysBeforeReminder;
     Calendar timeOfDayOfReminder;
 
+    // Constructor to initialize the object
     public Preferences() {
         notifications = new HashMap<String, Boolean>();
+
         lightTheme = true;
+
+        // Default reminder 3 days before expiration date
         daysBeforeReminder = 3;
-        //this is getting the minute, hour and seconds of the day for the reminder to be sent
+
+        // Default reminder at 9:00 AM
         timeOfDayOfReminder = Calendar.getInstance();
         timeOfDayOfReminder.set(Calendar.HOUR_OF_DAY, 9);
         timeOfDayOfReminder.set(Calendar.MINUTE, 0);
         timeOfDayOfReminder.set(Calendar.SECOND, 0);
     }
 
+    // Getters and setters
+
     public HashMap<String, Boolean> getNotifications() {
         return notifications;
     }
-    // getters and setters for notifications and lightTheme
+
     public void setNotifications(HashMap<String, Boolean> notifications) {
         this.notifications = notifications;
     }
@@ -53,7 +64,7 @@ public class Preferences {
     public void setDaysBeforeReminder(int daysBeforeReminder) {
         this.daysBeforeReminder = daysBeforeReminder;
     }
-    //method to get the time of day of the reminder
+
     public Calendar getTimeOfDayOfReminder() {
         return timeOfDayOfReminder;
     }
