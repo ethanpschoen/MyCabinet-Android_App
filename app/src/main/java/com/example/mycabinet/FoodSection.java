@@ -99,19 +99,9 @@ public class FoodSection {
     }
 
     public boolean removeFoodItem(FoodItem item) {
-        boolean removed = false;
+        boolean removed = sectionItems.remove(item);
 
-        for (FoodItem sectionItem : sectionItems) {
-            Log.d("FoodSection", "Checking item: " + sectionItem.getItemName() + " with size: " + sectionSize);
-            if (sectionItem.equals(item)) {
-                sectionItems.remove(sectionItem);
-                Log.d("FoodSection", "Found item: " + item.getItemName() + " with size: " + sectionSize);
-                removed = true;
-                break;
-            }
-        }
         if (removed) {
-            Log.d("FoodSection", "Found and removed item: " + item.getItemName() + " with size: " + sectionSize);
             sectionSize--;
             if (reminderListener != null) {
                 reminderListener.onFoodItemRemoved(item);

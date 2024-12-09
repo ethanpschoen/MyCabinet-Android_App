@@ -289,6 +289,10 @@ public class MainActivity extends AppCompatActivity implements ReminderListener 
 
         Intent intent = new Intent(context, ReminderBroadcastReceiver.class);
 
+        // Put item name and expiration date in intent
+        intent.putExtra("ITEM_NAME", item.getItemName());
+        intent.putExtra("EXPIRATION_DATE", item.getExpirationDate().toString());
+
         // Set pending intent
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
