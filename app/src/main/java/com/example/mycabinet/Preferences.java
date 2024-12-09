@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 // Change this set-up to just use SharedPreferences?
 public class Preferences {
-    Button btn_setReminder, btn_setDay, btn_doneReminder;
     HashMap<String, Boolean> notifications;
     Boolean lightTheme;
     int daysBeforeReminder;
@@ -26,7 +25,7 @@ public class Preferences {
     public HashMap<String, Boolean> getNotifications() {
         return notifications;
     }
-
+    // getters and setters for notifications and lightTheme
     public void setNotifications(HashMap<String, Boolean> notifications) {
         this.notifications = notifications;
     }
